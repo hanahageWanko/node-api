@@ -1,6 +1,7 @@
 import express from 'express'
 import * as database from './database'
 import bodyParser from 'body-parser';
+import cors from 'cors';
 require('dotenv').config();
 
 const DB = database.DB;
@@ -9,20 +10,12 @@ const app: express.Express = express();
 
 
 /*********************************************
-      CORSの許可
-*********************************************/
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-  next()
-})
-
-/*********************************************
+     CORSの許可
      body-parserに基づいた着信リクエストの解析。
      結果を配列で返す
 *********************************************/
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use('cors');
 
 
 // GetとPostのルーティング
