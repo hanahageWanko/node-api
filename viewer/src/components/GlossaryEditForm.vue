@@ -1,7 +1,11 @@
 <template>
   <v-dialog v-model="dialog" persistent dark max-width="80%">
     <v-card class="pa-8">
-      <v-card-title v-text="title" class="headline font-great" />
+      <v-card-title>
+        <h2 class="font-great mb-9">
+          {{ title }}
+        </h2>
+      </v-card-title>
       <div class="glossary-form">
         <v-text-field
           v-model="item.title"

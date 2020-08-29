@@ -6,13 +6,14 @@ class NoteItem {
     const now = new Date()
     // console.log(data.create)
     // const now = data.create
+    console.log(now.toLocaleTimeString('ja-JP'))
     this.title = data.title
     this.text = data.text
     this.id = data.id
     this.create = data.create
     this.dateStr = now.toLocaleDateString()
     this.styleStr = ''
-    // console.log(this.create)
+    // console.log(data.create)
     // console.log(this.dateStr)
   }
 }
