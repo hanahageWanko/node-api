@@ -3,7 +3,6 @@
     <v-col
       v-for="(item, index) in glossarys"
       :key="index"
-      cols="3"
       class="glossary-list-item"
     >
       <v-card dark>
@@ -113,8 +112,22 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .v-card {
   width: 100%;
+}
+
+.glossary-list-item {
+  display: flex;
+  align-items: center;
+  margin: 12px;
+  background: #1e1e1e;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  flex: 0 0 23%;
+  max-width: 23%;
+  .v-card {
+    box-shadow: none !important;
+  }
 }
 </style>
