@@ -39,7 +39,6 @@
     </v-app-bar>
     <v-main class="main-wrapper">
       <v-container fluid>
-        {{ GlossaryList }}
         <nuxt />
       </v-container>
     </v-main>
