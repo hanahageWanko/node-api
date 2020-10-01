@@ -13,7 +13,7 @@ const ItemStorage = function(axiosInstance, userName) {
   console.log(this.original)
 }
 
-ItemStorage.prototype.fetch = () => {
+ItemStorage.fetch = () => {
   return this.axiosClient
     .get(this.targetUrl, {
       /*
@@ -65,7 +65,7 @@ ItemStorage.add = function(text) {
       return Promise.resolve(addedItem)
     })
 }
-ItemStorage.prototype.remove = function(targetId) {
+ItemStorage.remove = function(targetId) {
   return this.axiosClient
     .delete(this.targetUrl + '/' + targetId)
     .then((result) => {
