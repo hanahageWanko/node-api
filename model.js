@@ -1,7 +1,7 @@
-import Sequelize from 'sequelize';
-import cls from 'continuation-local-storage';
+const Sequelize = require('sequelize');
+const cls = require('continuation-local-storage');
 const namespace = cls.createNamespace('my-namespace');
-// Sequelize.useCLS(namespace);
+Sequelize.useCLS(namespace);
 
 const sequelize = new Sequelize('Todo','root','', {
   host : 'localhost',
