@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "ts-node-dev --respawn Server.ts",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
