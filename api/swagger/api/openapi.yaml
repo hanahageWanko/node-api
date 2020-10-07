@@ -1,0 +1,52 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  version: 0.0.1
+servers:
+- url: http://localhost:3000/api
+  description: Sample Host
+tags:
+- name: Sample
+paths:
+  /getTest:
+    get:
+      tags:
+      - Sample
+      summary: Get test.
+      description: Get test.
+      operationId: getTest
+      parameters:
+      - name: name
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Sample
+      x-swagger-router-controller: Sample
+  /postTest:
+    post:
+      tags:
+      - Sample
+      summary: Post test.
+      description: Post test.
+      operationId: postTest
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/body'
+      responses:
+        "200":
+          description: Sample
+      x-swagger-router-controller: Sample
+components:
+  schemas:
+    body:
+      type: object
+      properties:
+        name:
+          type: string
