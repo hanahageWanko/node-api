@@ -1,69 +1,68 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql2');
-require('dotenv').config();
-
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
-})
-
-connection.connect();
+const database = require('./database.js');
 
 const app = express();
+const sequelize = database.sequelize;
+const Book = database.models.Book;
 
 app.use(bodyParser.json());
 
-app.get('/api/v1', (req, res) => {
-  connection.query('select * from todo_list', (error, results, fields) => {
-    console.log(req);
-    if(error) {console.error(err)}
-    res.send(results);
-  });
+app.put('/book/:isbn', (req, res) => {
+    const isbn = req.params['isbn'];
+    const book = req.body;
+
+    if (isbn === book.isbn) {
+        sequelize.transaction(async t => {
+            const b = await Book.findById(isbn);
+
+            if (b !== null) {
+                await Book.update(book, { where: { isbn: isbn } });
+                return Promise.resolve(res.status(201).send(book));
+            } else {
+                const created = await await Book.create(book);
+                return Promise.resolve(res.status(201).send(created));
+            }
+        });
+    } else {
+        res.sendStatus(400);
+    }
 });
 
-app.get('/api/v1/:id', (req, res) => {
-  connection.query('select * from todo_list where id = ?', req.params.id, (error, results, fields) => {
-    if (error) {console.error(error)}
-    res.send(results);
-  });
-});
+app.delete('/book/:isbn', (req, res) => {
+    const isbn = req.params['isbn'];
 
-app.post('/api/v1', (req, res) => {
-  let todo = {
-    name: req.body.name,
-    isDone : req.body.isDone
-  };
+    sequelize.transaction(async t => {
+        const b = await  Book.findById(isbn);
 
-  connection.query("insert into todo_list(name, isDone) values(?, ?)", [todo.name, todo.isDone], (error, results, fields) => {
-    if (error) { console.error(error) }
-    res.send(todo)
-  });
-});
-
-app.put('/api/v1/:id', (req, res) => {
-  connection.query(`select * from todo_list`, (error, results, fields) => {
-    connection.query("update todo_list set name = ?, isDone = ? where id = ?",
-      [req.body.name, req.body.isDone, req.params.id], (error, result, fields) => {
-        if (error) { console.log(error) }
-        res.send(result)
-      });
-  });
-});
-
-app.delete('/api/v1/:id', (req, res) => {
-  connection.query(`select * from todo_list`, (error, results, fields) => {
-    connection.query("delete from todo_list where id = ?", req.params.id, (error, result, fields) => {
-      if (error) { console.log(error) }
-      res.send(result)
+        if (b !== null) {
+            await Book.destroy({ where: { isbn: isbn } });
+            return Promise.resolve(res.sendStatus(204));
+        } else {
+            return Promise.resolve(res.sendStatus(204));
+        }
     });
-  });
 });
 
+app.get('/book/:isbn', (req, res) => {
+    const isbn = req.params['isbn'];
 
+    sequelize.transaction(async t => {
+        const b = await Book.findById(isbn);
 
-const port = process.removeListener.PORT || 3000;
+        if (b !== null) {
+            return Promise.resolve(res.send(b));
+        } else {
+            return Promise.resolve(res.sendStatus(404));
+        }
+    });
+});
 
-app.listen(port)
+app.get('/book', (req, res) => {
+    sequelize.transaction(async t => {
+        const books =  await Book.findAll({ order: [['price', 'ASC']] });
+        return Promise.resolve(res.send(books));
+    });
+});
+
+app.listen(3000);
