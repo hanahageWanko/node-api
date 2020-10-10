@@ -1,6 +1,5 @@
 import express from 'express'
 import mysql from 'mysql2';
-import bodyParser from 'body-parser';
 require('dotenv').config();
 
 const port:string | number = process.env.BASE_URL || 3000;
@@ -152,9 +151,7 @@ router.get('/api/v1/delete/:id', (req:express.Request, res:express.Response) => 
   });
 });
 
-
-
 app.use(router)
 
-// 3000番ポートでAPIサーバ起動
-app.listen(3000,()=>{ console.log('Example app listening on port 3000!') })
+// 任意のポートでAPIサーバ起動
+app.listen(port,()=>{ console.log(`Example app listening on port ${port} !`) })

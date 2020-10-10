@@ -22,6 +22,7 @@
   "author": "nakagawa <237s10mimi@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "continuation-local-storage": "^3.2.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
