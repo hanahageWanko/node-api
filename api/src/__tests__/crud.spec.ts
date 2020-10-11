@@ -3,9 +3,8 @@ const request = require('supertest');
 const express = require('express');
 const database = require('../database');
 require('dotenv').config();
-import iconv from 'iconv-lite';
-import encodings from 'iconv-lite/encodings';
-iconv.encodings = encodings;
+import * as iconv from 'iconv-lite';
+iconv.encodingExists('foo');
 
 const DB = database.DB;
 const port = 3000;
@@ -25,7 +24,7 @@ const Glossarys = [
 
 describe("CRUD", () => {
   test("It should response the GET method", async() => {
-    const response = await request(router).get('/api/v1/');
+    const response = await request(app).get('/api/v1/');
     expect(response.status).toBe(200);
     console.log(response.body);
     expect(response.body).toEqual({ hello: 'world' });
