@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 require('dotenv').config();
 
 const DB = database.DB;
-const port:string | number = process.env.BASE_URL || 3000;
+const port: string | number = process.env.BASE_URL || 3000;
 const app: express.Express = express();
 
 
