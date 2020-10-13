@@ -1,7 +1,7 @@
 import express from 'express'
 import * as database from './database'
 import bodyParser from 'body-parser';
-import cors from 'cors';
+const cors = require('cors');
 require('dotenv').config();
 
 const DB = database.DB;
@@ -15,8 +15,13 @@ const app: express.Express = express();
      結果を配列で返す
 *********************************************/
 app.use(bodyParser.json());
-app.use('cors');
-
+app.use(cors());
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*")
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+//   next()
+// });
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 // GetとPostのルーティング
 const router: express.Router = express.Router()
