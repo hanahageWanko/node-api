@@ -1,13 +1,19 @@
 import axios from 'axios'
-const Axs = axios.create({
+const HTTP = axios.create({
   baseURL: process.env.VUE_APP_ENDPOINT
 })
 
 export default {
-  testPosting () {
-    return Axs.get();
+  getGlossaryList () {
+    return HTTP.get()
+      .then(res => {return res})
+      .catch(res => {console.error(res)})
+  },
+  getGlossary(id) {
+    return HTTP.get(`/edit/${id}`)
+      .then(res => {return res})
+      .catch(res => {console.error(res)})
   }
-  // 他の処理も追加可能
 }
 
 

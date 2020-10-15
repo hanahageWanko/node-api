@@ -1,73 +1,65 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <button @click="post()">xxxxxx</button>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
     <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
+      <li v-for="list in glossary" :key="list.id" class="glossary-list">   
+        <div class="glossary-list-title">{{list.title}}</div>
+        <div class="glossary-list-dexcription">{{list.description}}</div>
+      </li>
     </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-    <h1>{{xx}}</h1>
+
   </div>
 </template>
 
 <script>
-import Methods from '@/plugins/methods'
+import Api from '@/plugins/Api'
 export default {
   name: 'HelloWorld',
   data() {
     return{
-     xx : {}
+     glossary:[]
     }
-  },
-  props: {
-    msg: String
   },
   methods: {
     // サーバーから返ってくる値をログに出力したいのでasyncとawaitを行う
-    async post() {
-      console.log(Methods.axios)
-      let response = await Methods.testPosting()
-      this.xx = response;
-      console.log(response)
-    }
+    post :async function() {
+      let response = await Api.getGlossaryList()
+      const { data } = response;
+      console.log(data)
+      this.glossary = data;
+    },
+  },
+  mounted(){
+    this.post();
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.glossary-list {
+  margin: 10px;
+  padding: 15px;
+  border-radius: 7px;
+  background-color: #1D1E1B;
+  cursor:pointer;
+}
+.glossary-list-title {
+  font-size:130%;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 ul {
   list-style-type: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y:scroll;
+  height:100vh;
+  padding: 10px;
 }
 li {
   display: inline-block;
-  margin: 0 10px;
+  margin: 10px;
 }
 a {
   color: #42b983;
