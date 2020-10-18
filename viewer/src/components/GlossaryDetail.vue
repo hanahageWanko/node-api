@@ -14,17 +14,22 @@ export default {
      glossary:[]
     }
   },
+  props: ['postCurrentId'],
+  watch: {
+    postCurrentId() {
+      this.post(this.postCurrentId)
+    }
+  },
   methods: {
     // サーバーから返ってくる値をログに出力したいのでasyncとawaitを行う
-    post :async function() {
-      let response = await Api.getGlossary(16)
+    post :async function(id) {
+      let response = await Api.getGlossary(id);
       const { data } = response;
-      console.log(data.result[0])
       this.glossary = data.result[0];
     },
   },
   mounted(){
-    this.post();
+    this.post(this.postCurrentId);
   }
 }
 </script>

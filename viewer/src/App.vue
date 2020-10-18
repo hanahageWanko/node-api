@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div id="wrapper">
-      <GlossaryList />
-      <GlossaryDetail />
+      <GlossaryList @getCurrentId='id = $event' />
+      <GlossaryDetail v-if="id != -1" :postCurrentId='id' />
     </div>
   </div>
 </template>
@@ -10,12 +10,23 @@
 <script>
 import GlossaryList from './components/GlossaryList.vue'
 import GlossaryDetail from './components/GlossaryDetail.vue'
+// import { mapState } from "vuex"
 export default {
   name: 'App',
   components: {
     GlossaryList,
     GlossaryDetail
+  },
+  data: function() {
+    return {
+      id: -1
+    }
   }
+  // computed: {
+  //   ...mapState([
+  //     "Glossary"
+  //   ])
+  // }
 }
 </script>
 

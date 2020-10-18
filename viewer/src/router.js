@@ -1,19 +1,23 @@
-Vue.use(VueRouter)
+import Vue from 'vue'
+import Router from 'vue-router'
+import Home from '@/App'
 
-const router = new VueRouter({
+Vue.use(Router);
+
+const router = new Router({
   routes: [
     {
       path: '/',
       component: Home
     },
     {
-      path: '/product', // IDが付いていないときはリストを表示
-      component: ProductList
+      path: '/detail/:id', 
+      component: Home
     },
-    {
-      path: '/product/:id', // 「:id」がパラメータ 何が入ってもOK
-      component: Product
-    }
+    // {
+    //   path: '/product/:id', // 「:id」がパラメータ 何が入ってもOK
+    //   component: Product
+    // }
   ]
 })
 export default router

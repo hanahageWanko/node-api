@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <ul>
-      <li v-for="list in glossary" :key="list.id" class="glossary-list" @click="openGlossaryDetail">
+      <li v-for="list in glossary" :key="list.id" class="glossary-list" @click="openGlossaryDetail(list.id)">
         <div class="glossary-list-title">{{list.title}}</div>
         <div class="glossary-list-dexcription">{{list.description}}</div>
       </li>
@@ -21,16 +21,20 @@ export default {
   },
   methods: {
     // サーバーから返ってくる値をログに出力したいのでasyncとawaitを行う
-    post :async function() {
+    getGlossaryList :async function() {
       let response = await Api.getGlossaryList()
       console.log(response)
       const { data } = response;
       console.log(data)
       this.glossary = data;
     },
+    openGlossaryDetail(id) {
+      this.$emit('getCurrentId', id);
+      this.$router.push({ path: `/detail/${id}` }).catch(()=>{});
+    }
   },
   mounted(){
-    this.post();
+    this.getGlossaryList();
   }
 }
 </script>
