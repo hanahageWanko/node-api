@@ -1,5 +1,8 @@
 <template>
-  <div class="note">{{glossary}}</div>
+  <div class="note">
+    <h2 class="note-title">{{glossary.title}}</h2>
+    <div class="note-description">{{glossary.description}}</div>
+  </div>
 </template>
 
 <script>
@@ -28,32 +31,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.glossary-list {
-  margin: 10px;
-  padding: 15px;
-  border-radius: 7px;
-  background-color: #1D1E1B;
-  cursor:pointer;
-}
-.glossary-list-title {
-  font-size:130%;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  overflow-y:scroll;
-  height:100vh;
-  padding: 10px;
-}
-li {
-  display: inline-block;
-  margin: 10px;
-}
-a {
-  color: #42b983;
+.note {
+  box-sizing: border-box;
+  padding: 17px;
 }
 </style>

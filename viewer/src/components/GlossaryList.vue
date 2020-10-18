@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <ul>
-      <li v-for="list in glossary" :key="list.id" class="glossary-list">   
+      <li v-for="list in glossary" :key="list.id" class="glossary-list" @click="openGlossaryDetail">
         <div class="glossary-list-title">{{list.title}}</div>
         <div class="glossary-list-dexcription">{{list.description}}</div>
       </li>
@@ -23,6 +23,7 @@ export default {
     // サーバーから返ってくる値をログに出力したいのでasyncとawaitを行う
     post :async function() {
       let response = await Api.getGlossaryList()
+      console.log(response)
       const { data } = response;
       console.log(data)
       this.glossary = data;
@@ -42,6 +43,7 @@ export default {
   border-radius: 7px;
   background-color: #1D1E1B;
   cursor:pointer;
+  box-sizing: border-box;
 }
 .glossary-list-title {
   font-size:130%;

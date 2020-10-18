@@ -1,8 +1,9 @@
 <template>
-  <div id="wrapper">
-    <GlossaryList />
-    <GlossaryDetail />
-    
+  <div id="app">
+    <div id="wrapper">
+      <GlossaryList />
+      <GlossaryDetail />
+    </div>
   </div>
 </template>
 
