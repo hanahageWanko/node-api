@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="all-glossary-list">
     <ul>
       <li v-for="list in glossary" :key="list.id" class="glossary-list" @click="openGlossaryDetail(list.id)">
         <div class="glossary-list-title">{{list.title}}</div>
@@ -41,8 +41,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.all-glossary-list {
+  padding: 10px;
+}
+
+.all-glossary-list ul {
+  margin-top: 0;
+  box-sizing:border-box;
+}
+
 .glossary-list {
-  margin: 10px;
   padding: 15px;
   border-radius: 7px;
   background-color: #1D1E1B;
@@ -65,7 +73,7 @@ ul {
 }
 li {
   display: inline-block;
-  margin: 10px;
+  margin-bottom: 10px;
 }
 a {
   color: #42b983;

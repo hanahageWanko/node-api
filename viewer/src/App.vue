@@ -48,7 +48,6 @@ body{
   height: 100vh;
   background-color: #272822;
   justify-content: space-evenly;
-  align-items: center;
   margin: 0;
   position: relative;
   overflow: hidden;

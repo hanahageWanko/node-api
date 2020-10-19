@@ -2,14 +2,20 @@
   <div class="note">
     <h2 class="note-title">{{glossary.title}}</h2>
     <div class="note-description">{{glossary.description}}</div>
+    <UiButton>更新</UiButton>
+    <UiButton color="orange">削除</UiButton>
   </div>
 </template>
 
 <script>
 import Api from '@/plugins/Api'
+import UiButton from '@/components/UiButton'
 export default {
   name: 'GlossaryDetail',
-    data() {
+  components: {
+    UiButton
+  },
+  data() {
     return{
      glossary:[]
     }
