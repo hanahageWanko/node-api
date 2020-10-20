@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import glossary from "./glossary";
+import user from "./user";
 
 Vue.use(Vuex);
 
@@ -8,6 +9,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   modules: {
     glossary,
+    user
   }
 });
 

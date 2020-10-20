@@ -11,11 +11,11 @@
         />
         <GlossaryAddForm v-else/> -->
       <div>
-          <signUp :targetKey="targetKey" />
-          <div id="id_section_main" style="display:none"><!-- サインアップ後のメイン画面 -->
+          <signUp v-if="!userName"/>
+          <div id="id_section_main" v-else><!-- サインアップ後のメイン画面 -->
               <div><!-- アコーディオンメニューを後でやる時 -->
                   <div id="id_setup_panel" class="cls_toggle_expand_collapse" v-on:click="toggleCtrlPanel">
-                      {{setuppanel_text}}
+                      {{ 'オプション（＠' + userName + 'さん）'}}
                   </div>
                   <transition name="trans_slide">
                       <!-- slideDown() / slideUp() のように上下に開閉するアコーディオンメニューのエリア -->
@@ -65,64 +65,41 @@
 // javascriptファイルをココへ。
 import signUp from '@/components/signUp';
 
-import axios from 'axios'
-import ItemStorage from '@/plugins/itemStorage.js';
-import userKeyManager from '@/plugins/userKey.js';
+// import axios from 'axios'
+// import ItemStorage from '@/plugins/itemStorage.js';
+// import userKeyManager from '@/plugins/userKey.js';
 import { mapState } from "vuex"
-const KEYNAME = 'user';
 export default {
     name : "App", // 「el : "#id_app1"」としていた部分。
-    props : {
-        windowLocationHref : {
-            type: String,
-            required: false
-        }
-    },
     components: {
       signUp
     },
-    data : function () { // オブジェクト{}で定義していた値を、「その値を返却する（無名）関数」に書き換える。
-        return {
-            setuppanel_text : 'オプションはこちら',
-            itemStorage : null,
-            input_message : '',
-            todo_list : [],
-            targetKey: '',
-            isPanelShow:false
-        }
+    data() { // オブジェクト{}で定義していた値を、「その値を返却する（無名）関数」に書き換える。
+      return {
+        setuppanel_text : 'オプションはこちら',
+        keyName: 'user',
+        itemStorage : null,
+        input_message : '',
+        todo_list : [],
+        targetKey: '',
+        isPanelShow:false
+      }
     },
     computed : {
         ...mapState({
           GlossaryState: state => state.glossary.GlossaryState,
-          CurrentGlossary: state => state.glossary.CurrentGlossary
+          CurrentGlossary: state => state.glossary.CurrentGlossary,
+          userName: state => state.user.userName
         }),
-        justUserName : function () {
-            return (this.isSignUp) ? userKeyManager.extractName(this.targetKey) : "未登録";
-        },
     },
-    created : function () {
-        const key = userKeyManager.getTargetUserFromUrlSearch(KEYNAME, this.windowLocationHref);
-        if(key){
-            this.itemStorage = new ItemStorage(axios, key);
-            this.targetKey = key;
-            this.setuppanel_text = 'オプション（＠' + this.justUserName + 'さん）';
-
-            this.itemStorage.fetch()
-            .then((result)=>{
-                this.todo_list = result; // このように「配列ごと変更」はOK、のようだ。
-            });
-        }
+    created() {
+      if(this.$route.query.user) {
+        console.log(this.$route.query.user)
+        this.$store.dispatch('user/setUserName', this.$route.query.user);
+      }
     },
     mounted : function () {
         // this.isPanelShow = true;
-    },
-    watch : {
-        todo_list : {
-            handler: function (/* todo_list */) {
-                // 何もしない
-            },
-            deep : true
-        }
     },
     methods : {
         toggleCtrlPanel : function () {

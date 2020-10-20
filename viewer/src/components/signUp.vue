@@ -1,5 +1,5 @@
 <template>
-  <div class="signup-section" v-if="!isSignUp"><!-- 初回サインアップ用 -->
+  <div class="signup-section"><!-- 初回サインアップ用 -->
       <h2 class="font-great">Sign Up</h2>
       <p>利用者名を入れてください（※3文字以上、16文字以内の英数字）。</p>
       <div class="glossary-form d-flex">
@@ -13,34 +13,22 @@
 
 <script>
 import UiButton from '@/components/UiButton';
-import userKeyManager from '@/plugins/userKey.js';
-const KEYNAME = 'user';
+// import userKeyManager from '@/plugins/userKey.js';
 export default {
   name: "SignUp",
   data() {
     return {
-      isPanelShow : false,
       userNameInput : '',
+      keyName: 'user'
     }
   },
-  props: ['targetKey'],
   components:{
     UiButton
   },
-  computed: {
-    // isUserNameValid : () => {
-    //     console.log(this.userNameInput)
-    //     const key = this.userNameInput;
-    //     return (key) && (key.length > 2) && (key.length <= 16);
-    // },
-    isSignUp : function () {
-      return (this.targetKey.length > 0);
-    },
-  },
   methods : {
-    createAccount : function () {
-        this.targetKey = userKeyManager.create(this.userNameInput);
-        window.location.href = './index.html?' + KEYNAME + '=' + this.targetKey;
+    createAccount(){
+      this.$store.dispatch('user/setUserName', this.userNameInput);
+      this.$router.push({ path: '/', query: { user: this.userNameInput }})
     },
   }
 }
