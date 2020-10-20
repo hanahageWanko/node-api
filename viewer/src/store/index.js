@@ -4,7 +4,7 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 const state = {
-  Glossary: ['mamamamama']
+  Glossary: []
 };
 
 //  Store 定義

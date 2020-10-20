@@ -16,7 +16,6 @@ export default{
   },
   computed: {
     buttonColor() {
-      console.log(this.color);
       return this.color != null ? this.color : "green"; 
     },
     buttonSize() {

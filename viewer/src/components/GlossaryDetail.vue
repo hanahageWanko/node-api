@@ -1,9 +1,13 @@
 <template>
   <div class="note">
-    <h2 class="note-title">{{glossary.title}}</h2>
-    <div class="note-description">{{glossary.description}}</div>
-    <UiButton>更新</UiButton>
-    <UiButton color="orange">削除</UiButton>
+    <h2>
+      <input type="text" class="note-title" v-model="glossaryTitle">
+    </h2>
+    <textarea class="note-description" v-model="glossaryDescription"></textarea>
+    <div class="button-area">
+      <UiButton @click="updateGlossary()">更新</UiButton>
+      <UiButton color="orange">削除</UiButton>
+    </div>
   </div>
 </template>
 
@@ -17,25 +21,41 @@ export default {
   },
   data() {
     return{
-     glossary:[]
+     glossary:[],
+     glossaryDescription:"",
+     glossaryTitle:""
     }
   },
   props: ['postCurrentId'],
   watch: {
     postCurrentId() {
-      this.post(this.postCurrentId)
+      this.getGlosary(this.postCurrentId);
+      this.getContents();
     }
   },
   methods: {
     // サーバーから返ってくる値をログに出力したいのでasyncとawaitを行う
-    post :async function(id) {
+    getGlosary :async function(id) {
       let response = await Api.getGlossary(id);
       const { data } = response;
       this.glossary = data.result[0];
+      this.getContents();
     },
+    updateGlossary:async function() {
+      this.glossary.description = this.glossaryDescription;
+      this.glossary.title = this.glossaryTitle;
+      let response = await Api.updateGlossary(this.glossary,this.postCurrentId);
+      const { data } = response;
+      this.glossary = data.result[0];
+    },
+    getContents () {
+      if(!this.glossary) return;
+      this.glossaryDescription = this.glossary.description;
+      this.glossaryTitle = this.glossary.title;
+    }
   },
   mounted(){
-    this.post(this.postCurrentId);
+    this.getGlosary(this.postCurrentId);
   }
 }
 </script>
@@ -45,5 +65,39 @@ export default {
 .note {
   box-sizing: border-box;
   padding: 17px;
+  height: 100%;
+  overflow-y: scroll;
+  position: relative;
+}
+
+.note-title {
+  background-color: inherit;
+  border:none;
+  font-size:130%;
+  display: block;
+  width: 100%;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.note-description {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height:calc(85% - 60px);
+  background-color: inherit;
+  border: none;
+  resize: none;
+}
+
+.note-description:focus {
+    outline: none;
+}
+
+.button-area {
+  position: absolute;
+  bottom:0;
+  left:0;
+  height: 60px;
 }
 </style>

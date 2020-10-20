@@ -58,7 +58,6 @@ export default {
   box-sizing: border-box;
 }
 .glossary-list-title {
-  font-size:130%;
   font-weight: bold;
   margin-bottom: 5px;
 }

@@ -2,7 +2,9 @@
   <div id="app">
     <div id="wrapper">
       <GlossaryList @getCurrentId='id = $event' />
-      <GlossaryDetail v-if="id != -1" :postCurrentId='id' />
+      <div class="detail" v-if="id != -1">
+        <GlossaryDetail :postCurrentId='id' />
+      </div>
     </div>
   </div>
 </template>
@@ -15,7 +17,7 @@ export default {
   name: 'App',
   components: {
     GlossaryList,
-    GlossaryDetail
+    GlossaryDetail,
   },
   data: function() {
     return {
@@ -41,7 +43,27 @@ body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #fafafa;
+  font-size:15px;
+  line-height: 1.65rem;
+  letter-spacing: 0.1rem;
 }
+
+h1,h2,h3,h4 {
+  margin: 0;
+}
+
+[class$="title"]  {
+  font-size:22px;
+  margin-bottom: 10px;
+}
+
+input,label,textarea,p,span,div,strong {
+  font-size: inherit;
+  color: inherit;
+  line-height: 1.65rem;
+ letter-spacing: inherit;
+}
+
 #wrapper {
   display: flex;
   width: 100%;
