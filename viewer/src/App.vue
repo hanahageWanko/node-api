@@ -24,11 +24,6 @@ export default {
       id: -1
     }
   }
-  // computed: {
-  //   ...mapState([
-  //     "Glossary"
-  //   ])
-  // }
 }
 </script>
 

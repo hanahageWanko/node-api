@@ -1,7 +1,7 @@
 <template>
   <div class="all-glossary-list">
     <ul>
-      <li v-for="list in glossary" :key="list.id" class="glossary-list" @click="openGlossaryDetail(list.id)">
+      <li v-for="list in GlossaryState[0]" :key="list.id" class="glossary-list" @click="openGlossaryDetail(list.id)">
         <div class="glossary-list-title">{{list.title}}</div>
         <div class="glossary-list-dexcription">{{list.description}}</div>
       </li>
@@ -11,22 +11,26 @@
 </template>
 
 <script>
-import Api from '@/plugins/Api'
+// import Api from '@/plugins/Api'
+import { mapState } from "vuex"
 export default {
   name: 'HelloWorld',
   data() {
-    return{
-     glossary:[]
-    }
+    return{}
+  },
+  computed: {
+    ...mapState([
+      "GlossaryState"
+    ])
   },
   methods: {
     // サーバーから返ってくる値をログに出力したいのでasyncとawaitを行う
-    getGlossaryList :async function() {
-      let response = await Api.getGlossaryList()
-      console.log(response)
-      const { data } = response;
-      console.log(data)
-      this.glossary = data;
+    getGlossaryList() {
+      // let response = await Api.getGlossaryList()
+      // const { data } = response;
+      // this.glossary = data;
+      this.$store.dispatch('getGlossary');
+      console.log(this.GlossaryState)
     },
     openGlossaryDetail(id) {
       this.$emit('getCurrentId', id);
