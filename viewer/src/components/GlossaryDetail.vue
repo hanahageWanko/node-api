@@ -1,6 +1,5 @@
 <template>
   <div class="note">
-    {{glossaryDetail}}
     <h2>
       <input type="text" class="note-title" v-model="glossaryTitle">
     </h2>
@@ -27,17 +26,12 @@ export default {
     }
   },
   props: ['glossaryDetail'],
-  // watch: {
-  //   postCurrentId() {
-  //     this.getGlosary(this.postCurrentId);
-  //     this.getContents();
-  //   }
-  // },
+  watch: {
+    $route() {
+      this.getContents();
+    }
+  },
   methods: {
-    // getGlosary: async function(id) {
-    //   await this.$store.dispatch('glossary/getDetail',id);
-    //   await this.getContents();
-    // },
     updateGlossary:async function() {
       this.glossary.description = this.glossaryDescription;
       this.glossary.title = this.glossaryTitle;
@@ -46,8 +40,8 @@ export default {
       this.glossary = data.result[0];
     },
     getContents: async function() {
-      this.glossaryDescription = await this.CurrentGlossary.description;
-      this.glossaryTitle = await this.CurrentGlossary.title;
+      this.glossaryDescription = await this.glossaryDetail.description;
+      this.glossaryTitle = await this.glossaryDetail.title;
       console.log(this.CurrentGlossary)
       console.log(this.glossaryDescription)
     }

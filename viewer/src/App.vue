@@ -2,12 +2,13 @@
   <div id="app">
     <div id="wrapper">
       <GlossaryList
-        @getCurrentId="GlossaryId = $event"
+        @getCurrentId="getGlossaryDetail($event)"
         :Glossarys="GlossaryState[0]"
       />
-      <div class="detail">
-        <GlossaryDetail v-if="GlossaryId !== -1" :glossaryDetail="CurrentGlossary"/>
-      </div>
+        <GlossaryDetail
+          v-if="CurrentGlossary.length >= 1"
+          :glossaryDetail="CurrentGlossary[0]"
+        />
     </div>
   </div>
 </template>
@@ -23,9 +24,7 @@ export default {
     GlossaryDetail,
   },
   data(){
-    return {
-      GlossaryId: -1
-    }
+    return {}
   },
   computed: {
     ...mapState({
@@ -33,16 +32,16 @@ export default {
       CurrentGlossary: state => state.glossary.CurrentGlossary
     }),
   },
-  watch: {
-    GlossaryId() {
-      this.getGlossary(this.GlossaryId);
-    }
-  },
+  // watch: {
+  //   GlossaryId() {
+  //     this.getGlossary(this.GlossaryId);
+  //   }
+  // },
   methods: {
     getGlossaryList() {
       this.$store.dispatch('glossary/getGlossary');
     },
-    getGlossary: async function(id) {
+    getGlossaryDetail: async function(id) {
      await this.$store.dispatch('glossary/getDetail',id);
     },
   },
