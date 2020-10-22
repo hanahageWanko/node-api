@@ -7,7 +7,7 @@
       />
         <GlossaryDetail
           v-if="CurrentGlossary.length >= 1"
-          :glossaryDetail="CurrentGlossary[0]"
+          :glossaryDetail="CurrentGlossary[0].result[0]"
         />
     </div>
   </div>

@@ -32,6 +32,10 @@ export default {
     }
   },
   methods: {
+    setTitle() {
+      this.glossaryDescription = this.glossaryDetail.description;
+      return this.glossaryDescription;
+    },
     updateGlossary:async function() {
       this.glossary.description = this.glossaryDescription;
       this.glossary.title = this.glossaryTitle;
@@ -47,8 +51,8 @@ export default {
     }
   },
   mounted(){
-    // this.getContents();
-    // this.getGlosary(this.postCurrentId)
+    this.glossaryDescription = this.glossaryDetail.description;
+    this.glossaryTitle = this.glossaryDetail.title;
   }
 }
 </script>
