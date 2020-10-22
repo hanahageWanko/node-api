@@ -1,7 +1,7 @@
 <template>
   <div class="all-glossary-list">
     <ul>
-      <li v-for="list in GlossaryState[0]" :key="list.id" class="glossary-list" @click="openGlossaryDetail(list.id)">
+      <li v-for="list in Glossarys" :key="list.id" class="glossary-list" @click="openGlossaryDetail(list.id)">
         <div class="glossary-list-title">{{list.title}}</div>
         <div class="glossary-list-dexcription">{{list.description}}</div>
       </li>
@@ -11,39 +11,22 @@
 </template>
 
 <script>
-// import Api from '@/plugins/Api'
-import { mapState } from "vuex"
 export default {
-  name: 'HelloWorld',
+  name: 'GlossaryList',
+  props:["Glossarys"],
   data() {
     return{}
   },
-  computed: {
-    ...mapState([
-      "GlossaryState"
-    ])
-  },
   methods: {
-    // サーバーから返ってくる値をログに出力したいのでasyncとawaitを行う
-    getGlossaryList() {
-      // let response = await Api.getGlossaryList()
-      // const { data } = response;
-      // this.glossary = data;
-      this.$store.dispatch('getGlossary');
-      console.log(this.GlossaryState)
-    },
     openGlossaryDetail(id) {
-      this.$emit('getCurrentId', id);
       this.$router.push({ path: `/detail/${id}` }).catch(()=>{});
-    }
-  },
-  mounted(){
-    this.getGlossaryList();
+      this.$store.dispatch('glossary/getClearDetail');
+      this.$emit("getCurrentId",id);
+    },
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .all-glossary-list {
   padding: 10px;

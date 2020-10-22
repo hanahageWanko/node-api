@@ -1,9 +1,12 @@
 <template>
   <div id="app">
     <div id="wrapper">
-      <GlossaryList @getCurrentId='id = $event' />
-      <div class="detail" v-if="id != -1">
-        <GlossaryDetail :postCurrentId='id' />
+      <GlossaryList
+        @getCurrentId="GlossaryId = $event"
+        :Glossarys="GlossaryState[0]"
+      />
+      <div class="detail">
+        <GlossaryDetail v-if="GlossaryId !== -1" :glossaryDetail="CurrentGlossary"/>
       </div>
     </div>
   </div>
@@ -12,17 +15,39 @@
 <script>
 import GlossaryList from './components/GlossaryList.vue'
 import GlossaryDetail from './components/GlossaryDetail.vue'
-// import { mapState } from "vuex"
+import { mapState } from "vuex"
 export default {
   name: 'App',
   components: {
     GlossaryList,
     GlossaryDetail,
   },
-  data: function() {
+  data(){
     return {
-      id: -1
+      GlossaryId: -1
     }
+  },
+  computed: {
+    ...mapState({
+      GlossaryState: state => state.glossary.GlossaryState,
+      CurrentGlossary: state => state.glossary.CurrentGlossary
+    }),
+  },
+  watch: {
+    GlossaryId() {
+      this.getGlossary(this.GlossaryId);
+    }
+  },
+  methods: {
+    getGlossaryList() {
+      this.$store.dispatch('glossary/getGlossary');
+    },
+    getGlossary: async function(id) {
+     await this.$store.dispatch('glossary/getDetail',id);
+    },
+  },
+  mounted() {
+    this.getGlossaryList();
   }
 }
 </script>

@@ -1,5 +1,6 @@
 <template>
   <div class="note">
+    {{glossaryDetail}}
     <h2>
       <input type="text" class="note-title" v-model="glossaryTitle">
     </h2>
@@ -21,26 +22,22 @@ export default {
   },
   data() {
     return{
-     glossary:[],
      glossaryDescription:"",
      glossaryTitle:""
     }
   },
-  props: ['postCurrentId'],
-  watch: {
-    postCurrentId() {
-      this.getGlosary(this.postCurrentId);
-      this.getContents();
-    }
-  },
+  props: ['glossaryDetail'],
+  // watch: {
+  //   postCurrentId() {
+  //     this.getGlosary(this.postCurrentId);
+  //     this.getContents();
+  //   }
+  // },
   methods: {
-    // サーバーから返ってくる値をログに出力したいのでasyncとawaitを行う
-    getGlosary :async function(id) {
-      let response = await Api.getGlossary(id);
-      const { data } = response;
-      this.glossary = data.result[0];
-      this.getContents();
-    },
+    // getGlosary: async function(id) {
+    //   await this.$store.dispatch('glossary/getDetail',id);
+    //   await this.getContents();
+    // },
     updateGlossary:async function() {
       this.glossary.description = this.glossaryDescription;
       this.glossary.title = this.glossaryTitle;
@@ -48,14 +45,16 @@ export default {
       const { data } = response;
       this.glossary = data.result[0];
     },
-    getContents () {
-      if(!this.glossary) return;
-      this.glossaryDescription = this.glossary.description;
-      this.glossaryTitle = this.glossary.title;
+    getContents: async function() {
+      this.glossaryDescription = await this.CurrentGlossary.description;
+      this.glossaryTitle = await this.CurrentGlossary.title;
+      console.log(this.CurrentGlossary)
+      console.log(this.glossaryDescription)
     }
   },
   mounted(){
-    this.getGlosary(this.postCurrentId);
+    // this.getContents();
+    // this.getGlosary(this.postCurrentId)
   }
 }
 </script>
