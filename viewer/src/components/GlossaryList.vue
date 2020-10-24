@@ -21,8 +21,15 @@
                 mdi-pencil
               </v-icon>
             </v-btn>
-            <v-btn
+            <!-- <v-btn
               @click="deleteItem(item.id)"
+              fab
+              icon
+              small
+              class="mr-5 text-capitalize"
+            > -->
+            <v-btn
+              @click="openDialog()"
               fab
               icon
               small
@@ -30,6 +37,12 @@
             >
               <v-icon>mdi-delete</v-icon>
             </v-btn>
+            <confirmDialog
+              v-if="deleteConfirmDialog.flg"
+              @confirmDialogResponse="confirmDialogResponse($event, item.id)"
+              :title="deleteConfirmDialog.title"
+              :text="deleteConfirmDialog.text"
+            />
           </v-col>
         </v-row>
       </v-card>
@@ -38,8 +51,12 @@
 </template>
 
 <script>
+import confirmDialog from '@/components/confirmDialog'
 export default {
   name: 'GlossaryList',
+  components: {
+    confirmDialog
+  },
   props: {
     glossarys: { type: Array, default: () => ({}) },
     username: {
@@ -48,7 +65,13 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      deleteConfirmDialog: {
+        title: '確認',
+        text: '削除してもよろしいですか？',
+        flg: false
+      }
+    }
   },
   mounted() {
     // this.$store.dispatch('user/setUserName', this.$route.query.user)
@@ -57,6 +80,13 @@ export default {
   methods: {
     deleteItem(id) {
       this.$ItemStorage.delete(this.username, id)
+    },
+    openDialog() {
+      this.deleteConfirmDialog.flg = true
+    },
+    confirmDialogResponse(event, id) {
+      this.deleteConfirmDialog.flg = false
+      if (event) this.deleteItem(id)
     }
   }
 }

@@ -58,10 +58,6 @@ export default (context, inject) => {
         (result) => {
           const status = result.status
           if (status === 200) {
-            // this.original = this.original.filter((item) => {
-            //   const id = item.id
-            //   return id !== targetId
-            // })
             context.store.dispatch('glossary/deleteGlossary', targetId)
             return Promise.resolve()
           } else {

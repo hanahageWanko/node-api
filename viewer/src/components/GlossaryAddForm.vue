@@ -30,7 +30,8 @@ export default {
   name: 'GlossaryAddForm',
   props: {
     username: {
-      type: String
+      type: String,
+      default: ''
     }
   },
   data() {
