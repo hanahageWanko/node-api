@@ -6,7 +6,7 @@
     <textarea class="note-description" v-model="glossaryDetail.description"></textarea>
     <div class="button-area">
       <UiButton @click="updateGlossary()">更新</UiButton>
-      <UiButton color="orange">削除</UiButton>
+      <UiButton @click="deleteGlossary()" color="orange">削除</UiButton>
     </div>
   </div>
 </template>
@@ -24,8 +24,11 @@ export default {
   props: ['glossaryDetail'],
   methods: {
     updateGlossary () {
-      console.log(this.glossaryDetail)
       this.$store.dispatch('glossary/updateGlossary',this.glossaryDetail);
+    },
+    deleteGlossary () {
+      this.$store.dispatch('glossary/deleteGlossary',this.glossaryDetail.id);
+      this.$store.dispatch('glossary/getClearDetail');
     }
   }
 }

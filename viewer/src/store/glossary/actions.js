@@ -10,6 +10,9 @@ const actions = {
   },
   updateGlossary({commit}, glossary) {
     commit("updadateGlossaryMutation", glossary);
+  },
+  deleteGlossary({commit}, id) {
+    commit("deleteGlossaryMutation", id);
   }
 }
 

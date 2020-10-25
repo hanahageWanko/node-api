@@ -21,5 +21,13 @@ export default {
         state.GlossaryState.splice(i, 1, glossary);
       }
     }
+  },
+  deleteGlossaryMutation: async (state, id) => {
+    await Api.deleteGlossary(id);
+    for(let i = 0; i < state.GlossaryState.length ; i++){
+      if(state.GlossaryState[i].id === id) {
+        state.GlossaryState.splice(i, 1);
+      }
+    }
   }
 }

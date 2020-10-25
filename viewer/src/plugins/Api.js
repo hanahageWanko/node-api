@@ -19,5 +19,10 @@ export default {
     return HTTP.post(`/update/${id}`,request)
       .then(res => {return res})
       .catch(res => {console.error(res)})
+  },
+  deleteGlossary(id) {
+    return HTTP.get(`/delete/${id}`)
+      .then(res => {return res})
+      .catch(res => {console.error(res)})
   }
 }
