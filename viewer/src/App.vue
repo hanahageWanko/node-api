@@ -1,14 +1,18 @@
 <template>
   <div id="app">
+    <div style="background:#000;">{{GlossaryState}}</div>
     <div id="wrapper">
       <GlossaryList
         @getCurrentId="getGlossaryDetail($event)"
-        :Glossarys="GlossaryState[0]"
+        :Glossarys="GlossaryState"
       />
         <GlossaryDetail
           v-if="CurrentGlossary.length >= 1"
-          :glossaryDetail="CurrentGlossary[0].result[0]"
+          :glossaryDetail="CurrentGlossary[0]"
         />
+      <!-- <GlossaryDetail
+          :glossaryDetail="CurrentGlossary"
+        /> -->
     </div>
   </div>
 </template>
@@ -47,6 +51,9 @@ export default {
   },
   mounted() {
     this.getGlossaryList();
+    if(this.$route.params.id) {
+      this.getGlossaryDetail(this.$route.params.id);
+    }
   }
 }
 </script>

@@ -1,13 +1,15 @@
 const actions = {
   getGlossary({commit}) {
-    commit("setGlossary");
+    commit("setGlossaryMutation");
   },
   getDetail({commit}, id) {
-    console.log(id)
-    commit("setDetail", id);
+    commit("setDetailMutation", id);
   },
   getClearDetail({commit}) {
-    commit("setClearDetail");
+    commit("setClearDetailMutation");
+  },
+  updateGlossary({commit}, glossary) {
+    commit("updadateGlossaryMutation", glossary);
   }
 }
 

@@ -1,9 +1,9 @@
 <template>
   <div class="note">
     <h2>
-      <input type="text" class="note-title" v-model="glossaryTitle">
+      <input type="text" class="note-title" v-model="glossaryDetail.title">
     </h2>
-    <textarea class="note-description" v-model="glossaryDescription"></textarea>
+    <textarea class="note-description" v-model="glossaryDetail.description"></textarea>
     <div class="button-area">
       <UiButton @click="updateGlossary()">更新</UiButton>
       <UiButton color="orange">削除</UiButton>
@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import Api from '@/plugins/Api'
 import UiButton from '@/components/UiButton'
 export default {
   name: 'GlossaryDetail',
@@ -20,39 +19,14 @@ export default {
     UiButton
   },
   data() {
-    return{
-     glossaryDescription:"",
-     glossaryTitle:""
-    }
+    return{}
   },
   props: ['glossaryDetail'],
-  watch: {
-    $route() {
-      this.getContents();
-    }
-  },
   methods: {
-    setTitle() {
-      this.glossaryDescription = this.glossaryDetail.description;
-      return this.glossaryDescription;
-    },
-    updateGlossary:async function() {
-      this.glossary.description = this.glossaryDescription;
-      this.glossary.title = this.glossaryTitle;
-      let response = await Api.updateGlossary(this.glossary,this.postCurrentId);
-      const { data } = response;
-      this.glossary = data.result[0];
-    },
-    getContents: async function() {
-      this.glossaryDescription = await this.glossaryDetail.description;
-      this.glossaryTitle = await this.glossaryDetail.title;
-      console.log(this.CurrentGlossary)
-      console.log(this.glossaryDescription)
+    updateGlossary () {
+      console.log(this.glossaryDetail)
+      this.$store.dispatch('glossary/updateGlossary',this.glossaryDetail);
     }
-  },
-  mounted(){
-    this.glossaryDescription = this.glossaryDetail.description;
-    this.glossaryTitle = this.glossaryDetail.title;
   }
 }
 </script>
