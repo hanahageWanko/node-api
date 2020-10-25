@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <div style="background:#000;">{{GlossaryState}}</div>
     <div id="wrapper">
       <GlossaryList
         @getCurrentId="getGlossaryDetail($event)"
@@ -10,6 +9,7 @@
           v-if="CurrentGlossary.length >= 1"
           :glossaryDetail="CurrentGlossary[0]"
         />
+        <GlossaryAddForm v-else/>
       <!-- <GlossaryDetail
           :glossaryDetail="CurrentGlossary"
         /> -->
@@ -20,12 +20,14 @@
 <script>
 import GlossaryList from './components/GlossaryList.vue'
 import GlossaryDetail from './components/GlossaryDetail.vue'
+import GlossaryAddForm from './components/GlossaryAddForm.vue'
 import { mapState } from "vuex"
 export default {
   name: 'App',
   components: {
     GlossaryList,
     GlossaryDetail,
+    GlossaryAddForm
   },
   data(){
     return {}
