@@ -60,7 +60,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 body{
   margin: 0;
   padding: 0;
@@ -106,4 +106,27 @@ input,label,textarea,p,span,div,strong {
 #wrapper > div {
   flex:1;
 }
+
+.glossary-form {
+  padding: 20px;
+  .textbox {
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    label {
+      padding-right:15px;
+      width: 20%;
+    }
+    input{
+      display: block;
+      width: 100%;
+      border:none;
+      background-color: transparent;
+      border-bottom: 1px solid rgba(255,255,255, .8);
+    }
+  }
+}
+
+
 </style>

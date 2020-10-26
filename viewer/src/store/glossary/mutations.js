@@ -14,6 +14,11 @@ export default {
   setClearDetailMutation: async state => {
     await state.CurrentGlossary.splice(0);
   },
+  addGlossaryMutation: async (state, glossary) => {
+    let response = await Api.addGlossary(glossary);
+    const { data } = response;
+    state.GlossaryState.push(data);
+  },
   updadateGlossaryMutation: async (state, glossary) => {
     await Api.updateGlossary( glossary, glossary.id);
     for(let i = 0; i < state.GlossaryState.length ; i++){

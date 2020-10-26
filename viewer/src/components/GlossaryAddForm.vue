@@ -1,12 +1,18 @@
 <template>
   <div class="glossary-form add-form">
-    <div>
-      <label>Title</label><input type="text" name="title" v-vmodel>
+    <div class="textbox">
+      <label>Title</label><input type="text" name="title" v-model="title">
     </div>
-    <div>
-      <label>Description</label><input type="text" name="description">
+    <div class="textbox">
+      <label>Description</label><input type="text" name="description" v-model="description">
     </div>
-    <UiButton>送信</UiButton>
+    <dir>
+      {{title}}
+    </dir>
+    <dir>
+      {{description}}
+    </dir>
+    <UiButton @click="addGlossary()">送信</UiButton>
   </div>
 </template>
 
@@ -15,17 +21,20 @@ import UiButton from '@/components/UiButton'
 export default {
   name: 'GlossaryAddForm',
   data() {
-    return{}
+    return{
+      title:"",
+      description:""
+    }
   },
   components: {
     UiButton
   },
   methods: {
-    // openGlossaryDetail(id) {
-    //   this.$router.push({ path: `/detail/${id}` }).catch(()=>{});
-    //   this.$store.dispatch('glossary/getClearDetail');
-    //   this.$emit("getCurrentId",id);
-    // },
+    addGlossary() {
+      const item = {title:this.title, description:this.description}
+      this.$store.dispatch('glossary/addGlossary', item);
+      this.$store.dispatch('glossary/getGlossary');
+    },
   }
 }
 </script>

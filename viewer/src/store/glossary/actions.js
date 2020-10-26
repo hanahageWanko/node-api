@@ -8,6 +8,9 @@ const actions = {
   getClearDetail({commit}) {
     commit("setClearDetailMutation");
   },
+  addGlossary({commit}, glossary) {
+    commit("addGlossaryMutation", glossary);
+  },
   updateGlossary({commit}, glossary) {
     commit("updadateGlossaryMutation", glossary);
   },

@@ -4,17 +4,22 @@ const HTTP = axios.create({
 })
 
 export default {
-  getGlossaryList () {
+  getGlossaryList: () => {
     return HTTP.get()
       .then(res => {return res})
       .catch(res => {console.error(res)})
   },
-  getGlossary(id) {
+  getGlossary: id => {
     return HTTP.get(`/edit/${id}`)
       .then(res => {return res})
       .catch(res => {console.error(res)})
   },
-  updateGlossary(request, id) {
+  addGlossary: glossary => {
+    return HTTP.post('/add/', glossary)
+      .then(res => {return res})
+      .catch(res => {console.error(res)})
+  },
+  updateGlossary: (request, id) => {
     console.log([request,id])
     return HTTP.post(`/update/${id}`,request)
       .then(res => {return res})

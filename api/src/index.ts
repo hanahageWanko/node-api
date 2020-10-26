@@ -69,14 +69,6 @@ router.get('/api/v1/edit/:id', (req:express.Request, res:express.Response) => {
 
 router.post('/api/v1/update/:id', (req:express.Request, res:express.Response) => {
   const sql = `UPDATE ${process.env.TABLE_NAME} SET ? WHERE id = ?`;
-  // const x = [
-  //   {
-  //     description: "見上げてごらん夜のほしを小さな星の小さな光ga",
-  //     id: 19,
-  //     title: "tanaka"
-  //   },
-  //   19
-  // ]
   DB.query(sql, [req.body, req.params.id], (err, result, fields) => {
     if(err) {
       console.error(err);
