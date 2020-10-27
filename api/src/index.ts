@@ -5,7 +5,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const DB = database.DB;
-const port: string | number = process.env.BASE_URL || 3000;
+const port: string | any = process.env.PORT || process.env.BASE_URL;
 const app: express.Express = express();
 
 
