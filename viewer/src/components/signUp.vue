@@ -1,18 +1,18 @@
 <template>
-  <div id="id_section_signup" v-if="!isSignUp"><!-- 初回サインアップ用 -->
-      【サインアップ】<br><br>
-      利用者名を入れてください（※3文字以上、16文字以内の英数字）。：
-      <font-awesome-icon icon="check" style="color:#4444ff"></font-awesome-icon>
-      <br>
-      <input id="id_username" v-model="userNameInput"><br>
-      <div>
-          <input v-show="userNameInput" value="登録" type="button" v-on:click="createAccount">
+  <div class="signup-section" v-if="!isSignUp"><!-- 初回サインアップ用 -->
+      <h2 class="font-great">Sign Up</h2>
+      <p>利用者名を入れてください（※3文字以上、16文字以内の英数字）。</p>
+      <div class="glossary-form d-flex">
+        <div class="textbox">
+          <input v-model="userNameInput">
+        </div>
+        <UiButton  v-show="userNameInput" @click="createAccount">更新</UiButton>
       </div>
-      <br>
   </div>
 </template>
 
 <script>
+import UiButton from '@/components/UiButton';
 import userKeyManager from '@/plugins/userKey.js';
 const KEYNAME = 'user';
 export default {
@@ -24,6 +24,9 @@ export default {
     }
   },
   props: ['targetKey'],
+  components:{
+    UiButton
+  },
   computed: {
     // isUserNameValid : () => {
     //     console.log(this.userNameInput)
@@ -42,3 +45,15 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .signup-section {
+    margin: 40px;
+    .glossary-form {
+      .textbox {
+        width:70%;
+        margin-right: 20px;
+      }
+    }
+  }
+</style>

@@ -152,3 +152,84 @@ export default {
     }
 }
 </script>
+
+
+<style lang="scss">
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #fafafa;
+  font-size:15px;
+  line-height: 1.65rem;
+  letter-spacing: 0.1rem;
+}
+h1,h2,h3,h4 {
+  margin: 0;
+}
+h1{ font-size:300%; margin-bottom:20px; }
+h2{ font-size:250%; margin-bottom:20px; }
+h3{ font-size:200%; margin-bottom:20px; }
+h4{ font-size:170%; margin-bottom:20px; }
+
+[class$="title"]  {
+  font-size:22px;
+  margin-bottom: 10px;
+}
+input,label,textarea,p,span,div,strong {
+  font-size: inherit;
+  color: inherit;
+  line-height: 1.65rem;
+ letter-spacing: inherit;
+}
+#wrapper {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background-color: #272822;
+  justify-content: space-evenly;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+#wrapper > div {
+  flex:1;
+}
+.glossary-form {
+  padding: 20px;
+  .textbox {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    label {
+      padding-right:15px;
+      width: 20%;
+    }
+    input{
+      display: block;
+      width: 100%;
+      border:none;
+      background-color: transparent;
+      border-bottom: 1px solid rgba(255,255,255, .8);
+    }
+    + .textbox{
+      margin-top: 20px;
+    }
+  }
+}
+
+.d-flex {
+  display:flex;
+  align-items:center;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+.font-great {
+  font-family: 'Great Vibes', sans-serif;
+}
+</style>
