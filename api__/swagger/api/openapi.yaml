@@ -1,0 +1,136 @@
+openapi: 3.0.0
+info:
+  title: OpenAPI Tutorial
+  description: OpenAPI Tutorial by halhorn
+  version: 0.0.0
+servers:
+  - url: https://example.com/api/v1
+    description: プロダクション API
+  - url: http://{host}:{port}/api/v1
+    description: 開発用
+    variables:
+      host:
+        default: localhost
+      port:
+        default: '3000'
+paths:
+  /:
+    get:
+      summary: 登録用語集一覧
+      description: 登録されている用語集の一覧を返します。
+      responses:
+        '200':
+          description: 正常に値を返しました。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/allItems'
+  /add:
+    post:
+      summary: 用語集の登録
+      description: 用語集を登録します。
+      parameters:
+        - name: isbn
+          in: formData
+          description: 取得対象のID
+          required: true
+          schema:
+            type: integer
+        - name: title
+          in: formData
+          description: 取得対象のタイトル
+          required: true
+          schema:
+            type: string
+        - name: description
+          in: formData
+          description: 取得対象の内容
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: 登録したい用語集のタイトルと内容を登録する。
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item-base-info:
+                  $ref: "#/components/schemas/item-base-info"
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: REGISTERED
+        400:
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: BAD_REQUEST
+                  message:
+                    type: string
+                    example: BAD_REQUEST
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: CONFLICT
+                  message:
+                    type: string
+                    example: CONFLICT
+
+components:
+  schemas:
+    allItems:
+      description: サーバーの状態のレスポンス
+      type: object
+      properties:
+        isbn:
+          type: integer
+          enum:
+            - 1
+        title:
+          type: string
+          enum:
+            - 用語集のタイトル
+        description:
+          type: string
+          enum:
+            - 用語集の説明
+      required:
+        - status
+    item-base-info:
+      type: array
+      items:
+        type: object
+        properties:
+          isbn:
+            type: integer
+          title:
+            type: string
+          description:
+            type: string
+      example:
+        - isbn: 007
+          title: ゼニガメ
+          description: こうらに　とじこもり　みをまもる。
+        - isbn: 132
+          title: メタモン
+          description: ぜんしんの　さいぼうを　くみかえて　みたもの　そっくりに　へんしんする
