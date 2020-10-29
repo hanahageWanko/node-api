@@ -6,7 +6,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const DB = database.DB;
-const port: string | any = process.env.ENVIRONMENT === 'dev' ? 3000 : process.env.PORT;
+const port: string | any = process.env.PORT || 3000;
 const app: express.Express = express();
 
 
