@@ -1,4 +1,5 @@
 import axios from 'axios'
+// import { ERROR } from 'jest-validate/build/utils';
 const HTTP = axios.create({
   baseURL: process.env.VUE_APP_ENDPOINT
 })
@@ -10,7 +11,7 @@ export default {
         return res
       })
       .catch((res) => {
-        console.error(res)
+        return res
       })
   },
   getGlossary: (id) => {
@@ -19,7 +20,7 @@ export default {
         return res
       })
       .catch((res) => {
-        console.error(res)
+        return res
       })
   },
   addGlossary: (glossary) => {
@@ -28,7 +29,7 @@ export default {
         return res
       })
       .catch((res) => {
-        console.error(res)
+        return res
       })
   },
   updateGlossary: (request, id) => {
@@ -38,7 +39,7 @@ export default {
         return res
       })
       .catch((res) => {
-        console.error(res)
+        return res
       })
   },
   deleteGlossary(id) {
@@ -47,7 +48,7 @@ export default {
         return res
       })
       .catch((res) => {
-        console.error(res)
+        return res
       })
   }
 }
