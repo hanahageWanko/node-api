@@ -42,11 +42,12 @@ export default {
   methods: {
     clickInputButton() {
       const postData = {
-        title: this.newTitle,
-        text: this.newText
+        title: this.inputTitle,
+        text: this.inputText
       }
       if (postData.title !== '' && postData.text !== '') {
         this.createGlossaryFlg = true
+        console.log(postData)
         this.$ItemStorage.add(this.username, postData).then((createdItem) => {
           this.inputText = ''
           this.inputTitle = ''

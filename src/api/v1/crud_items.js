@@ -255,7 +255,7 @@ var createItemAtUserName = function(userName, dataObj) {
       return _querySqlite3(
         db,
         QUERYS.ENUMERATE_ITEMS_ON_USER_AND_TEXT(process.env.SQLITE_TABLE_NAME),
-        [userName]
+        [userName, title, text]
       ).then(result2 => {
         var rows = result2.rows;
         return _insertOrNoteiceExist(

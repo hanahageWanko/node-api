@@ -30,7 +30,7 @@ export default (context, inject) => {
         const items = responsedata.items
         const item = items[0]
         const addedItem = createNoteItem(item)
-        this.original.push(addedItem)
+        context.store.dispatch('glossary/addGlossary', addedItem)
         return Promise.resolve(addedItem)
       })
     },
@@ -49,7 +49,6 @@ export default (context, inject) => {
         const glossaryList = []
         items.forEach(function(item) {
           glossaryList.push(createNoteItem(item))
-          console.log(item)
         })
         context.store.dispatch('glossary/getGlossary', glossaryList)
       })

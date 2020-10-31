@@ -1,53 +1,37 @@
 <template>
   <div id="wrapper">
-    <SignUp v-if="!$route.query.user" />
-    <GlosssaryAddForm v-if="$route.query.user" :username="UserName" />
-    <v-row v-if="$route.query.user" class="glossary-list">
-      <v-progress-linear v-if="createGlossaryFlg" indeterminate />
-      <v-col
-        v-for="(item, index) in GlossaryList"
-        :key="index"
-        cols="4"
-        class="glossary-list-item"
-      >
-        <v-card dark>
-          <v-card-title v-text="item.title" class="headline pb-0" />
-          <v-card-text>
-            <div>{{ item.text }}</div>
-          </v-card-text>
-          <v-row align="center" class="d-flex" justify="end">
-            <v-col>
-              <v-card-text v-text="item.dateStr" />
-            </v-col>
-            <v-col cols="auto" class="p-0">
-              <v-btn fab icon small>
-                <v-icon>
-                  mdi-pencil
-                </v-icon>
-              </v-btn>
-              <v-btn class="mr-5" fab icon small>
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-col>
-    </v-row>
+    <SignUp v-if="!showGlossaryFlg" @showGlossary="showGlossary()" />
+    <GlossaryAddForm v-if="showGlossaryFlg" :username="UserName" />
+    <GlossaryList
+      v-if="showGlossaryFlg"
+      :glossarys="GlossaryList"
+      :username="UserName"
+    />
+    {{ UserName }}
   </div>
 </template>
 <script>
 import SignUp from '@/components/SignUp'
-import GlosssaryAddForm from '@/components/GlossaryAddForm'
+import GlossaryAddForm from '@/components/GlossaryAddForm'
+import GlossaryList from '@/components/GlossaryList'
 import { mapState } from 'vuex'
 export default {
   components: {
     SignUp,
-    GlosssaryAddForm
+    GlossaryAddForm,
+    GlossaryList
   },
   data() {
     // オブジェクト{}で定義していた値を、「その値を返却する（無名）関数」に書き換える。
     return {
-      createGlossaryFlg: false
+      createGlossaryFlg: false,
+      showGlossaryFlg: false
+    }
+  },
+  created() {
+    if (this.$route.query.user) {
+      this.showGlossaryFlg = true
+      this.$store.dispatch('user/setUserName', this.$route.query.user)
     }
   },
   computed: {
@@ -57,22 +41,9 @@ export default {
       UserName: (state) => state.user.userName
     })
   },
-  created() {
-    if (this.$route.query.user) {
-      this.$store.dispatch('user/setUserName', this.$route.query.user)
-      this.$ItemStorage.fetch(this.UserName)
-    }
-  },
   methods: {
-    clickItem(index) {
-      // this.todoList[index].toggleTextStyle('text-decoration: line-through;')
-      // ToDo: クリックでのトグル動作時の扱いを『暫定』としたいので、このような実装にする。
-    },
-    clickDeleteButton(index) {
-      const targetId = this.todoList[index].id
-      this.itemStorage.remove(targetId).then(() => {
-        this.todoList.splice(index, 1)
-      })
+    showGlossary() {
+      this.showGlossaryFlg = true
     }
   }
 }

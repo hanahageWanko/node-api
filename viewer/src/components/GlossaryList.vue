@@ -1,73 +1,55 @@
 <template>
-  <div class="all-glossary-list">
-    <ul>
-      <li
-        v-for="list in Glossarys"
-        :key="list.id"
-        @click="openGlossaryDetail(list.id)"
-        class="glossary-list"
-      >
-        <div class="glossary-list-title">{{ list.title }}</div>
-        <div class="glossary-list-dexcription">{{ list.description }}</div>
-      </li>
-    </ul>
-  </div>
+  <v-row class="glossary-list">
+    {{ glossarys }}
+    <v-progress-linear indeterminate />
+    <v-col
+      v-for="(item, index) in glossarys"
+      :key="index"
+      cols="4"
+      class="glossary-list-item"
+    >
+      <v-card dark>
+        <v-card-title v-text="item.title" class="headline pb-0" />
+        <v-card-text>
+          <div>{{ item.text }}</div>
+        </v-card-text>
+        <v-row align="center" class="d-flex" justify="end">
+          <v-col>
+            <v-card-text v-text="item.dateStr" />
+          </v-col>
+          <v-col cols="auto" class="p-0">
+            <v-btn fab icon small>
+              <v-icon>
+                mdi-pencil
+              </v-icon>
+            </v-btn>
+            <v-btn class="mr-5" fab icon small>
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
 export default {
   name: 'GlossaryList',
   props: {
-    glossarys: { type: Object, default: () => ({}) }
+    glossarys: { type: Array, default: () => ({}) },
+    username: {
+      type: String
+    }
   },
   data() {
     return {}
   },
-  methods: {
-    openGlossaryDetail(id) {
-      this.$router.push({ path: `/detail/${id}` }).catch(() => {})
-      this.$store.dispatch('glossary/getClearDetail')
-      this.$emit('getCurrentId', id)
-    }
+  mounted() {
+    // this.$store.dispatch('user/setUserName', this.$route.query.user)
+    this.$ItemStorage.fetch(this.username)
   }
 }
 </script>
 
-<style scoped>
-.all-glossary-list {
-  padding: 10px;
-}
-
-.all-glossary-list ul {
-  margin-top: 0;
-  box-sizing: border-box;
-}
-
-.glossary-list {
-  padding: 15px;
-  border-radius: 7px;
-  background-color: #1d1e1b;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-.glossary-list-title {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  overflow-y: scroll;
-  height: 100vh;
-  padding: 10px;
-}
-li {
-  display: inline-block;
-  margin-bottom: 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
+<style scoped></style>

@@ -40,6 +40,7 @@ export default {
     createAccount() {
       this.$store.dispatch('user/setUserName', this.inputTitle)
       this.$router.push({ path: '/', query: { user: this.inputTitle } })
+      this.$emit('showGlossary')
     }
   }
 }
