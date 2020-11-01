@@ -1,9 +1,14 @@
+/**
+ * [api.js]
+ * encoding=UTF-8
+ */
+
 var express = require('express');
 var router = express.Router();
 
-var Factory = require('../factory/index.js').Factroy;
+var Factory4Hook = require('../../factory4hook.js').Factory4Hook;
 
-var itemsSingleton = new Factory(require('../api/crud_items'));
+var itemsSingleton = new Factory4Hook(require('../../api/v1/crud_items'));
 // var items = require('../api_v1/items');
 
 if( process.env.NODE_ENV == 'test' ){
@@ -11,7 +16,6 @@ if( process.env.NODE_ENV == 'test' ){
 	// 個別では無くて、 routerに対してプロパティを足すことで対応する。
 	router['itemsSingleton'] = itemsSingleton;
 }
-
 
 router.use('/', function (req, res, next) {
 	var headers = req.headers;

@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon",
+    "start": "nodemon index.js",
     "test": "jest",
     "tsc:ver": "tsc -v",
     "tsc": "tsc",
