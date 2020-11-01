@@ -1,100 +1,55 @@
 import express from 'express'
-import * as database from './database'
-import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
 import path from 'path';
+import apiRouter from './routes/api';
 const cors = require('cors');
 require('dotenv').config();
 
-const DB = database.DB;
+const app: express.Express = express();
+
+//don't show the log when it is test
+if(process.env.NODE_ENV!='test'){
+  app.use(logger('dev'));
+}
+
+// app.use(bodyParser.json());
+app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// const DB = database.DB;
 const port: string | any = process.env.PORT || 3000;
 const app: express.Express = express();
 
 
 /*********************************************
      CORSの許可
-     body-parserに基づいた着信リクエストの解析。
-     結果を配列で返す
+     リクエストボディをjsonで返す
 *********************************************/
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*")
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-//   next()
-// });
-// app.use(bodyParser.urlencoded({ extended: true }));
 
-// GetとPostのルーティング
+app.use('/', apiRouter);
+
+// module.exports = app;
+// var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
 const router: express.Router = express.Router()
-
-/*********************************************
-      テーブル内容取得
-*********************************************/
-router.get('/api/v1', (req:express.Request, res:express.Response) => {
-  const selectTableSql = `SELECT * from ${process.env.TABLE_NAME}`;
-  DB.query(selectTableSql, (err, result, fields) => {
-    if(err) console.error(err);
-    res.send(result);
-  });
-})
-
-
-
-
-/*********************************************
-       POSTされた値をDBヘ挿入 & 表示
-*********************************************/
-router.post('/api/v1/add/', (req:express.Request, res:express.Response) => {
-  const insertSql = `INSERT INTO ${process.env.TABLE_NAME} SET ?`;
-  DB.query(insertSql, req.body, (err,result,fields) => {
-    if(err){
-      console.error(err);
-      return;
-    }
-    res.send(req.body);
-  });
-});
-
-
-router.get('/api/v1/edit/:id', (req:express.Request, res:express.Response) => {
-  const sql = `select * from ${process.env.TABLE_NAME} WHERE id = ?`;
-  DB.query(sql, [req.params.id], (err, result, fields) => {
-    if(err) {
-      console.error(err);
-      return;
-    }
-    res.send({result});
-  })
-})
-
-
-router.post('/api/v1/update/:id', (req:express.Request, res:express.Response) => {
-  const sql = `UPDATE ${process.env.TABLE_NAME} SET ? WHERE id = ?`;
-  DB.query(sql, [req.body, req.params.id], (err, result, fields) => {
-    if(err) {
-      console.error(err);
-      return;
-    }
-    res.send({result});
-  });
-});
-
-  
-router.get('/api/v1/delete/:id', (req:express.Request, res:express.Response) => {
-  const sql = `DELETE FROM ${process.env.TABLE_NAME} WHERE id = ?`;
-  DB.query(sql, [req.params.id], (err, result, fields) => {
-    if(err) {
-      console.error(err);
-      return;
-    }
-    res.send({result});
-  });
-});
-
-
-
 app.use(router)
 
-// 3000番ポートでAPIサーバ起動
-app.listen(port,()=>{ console.log(`Example app listening on port ${port}!`) })
+/**
+ * Create HTTP server.
+ */
+
+// var server = http.createServer(app);
+// 
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+// server.listen(port);
