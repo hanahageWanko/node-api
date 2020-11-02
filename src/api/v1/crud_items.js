@@ -3,30 +3,71 @@
  * encoding=UTF-8
  */
 const Factory4Hook = require('../../factory4hook.js').Factory4Hook;
-
 const QUERYS = {
-    CREATE_TABLE = () => {
-        return 'CREATE TABLE itemstorage([id] [INTEGER] PRIMARY KEY AUTOINCREMENT NOT NULL, [user] [TEXT] NOT NULL, [created_at] [TEXT] NOT NULL, [updated_at] [TEXT] NOT NULL, [rawtext] [TEXT] NOT NULL )';
+    CREATE_TABLE: tablename => {
+        return `CREATE TABLE ${tablename}(
+                [id] [INTEGER] PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                [user] [TEXT] NOT NULL, 
+                [created_at] [TEXT] NOT NULL, 
+                [updated_at] [TEXT] NOT NULL, 
+                [rawtext] [TEXT] NOT NULL )`;
+    },
+    INSEDRT_ITEM: tablename => {
+        return `INSERT INTO ${tablename}(
+                user, 
+                created_at, 
+                updated_at, 
+                rawtext) 
+                VALUES( ?, ?, ?, ? )`;
+    },
+    UPDATE_ITEM: tablename => {
+        return `UPDATE ${tablename} SET 
+                rawtext=?, 
+                updated_at=? 
+                WHERE [id] = ?`;
+    },
+    ENUMERATE_ITEMS_BY_ID: tablename => {
+        return `SELECT id, 
+                user, 
+                created_at, 
+                updated_at, 
+                rawtext 
+                FROM ${tablename} WHERE [id] = ?`;
+    },
+    ENUMERATE_ITEMS_ON_USER: tablename => {
+        return `SELECT id, 
+                user, 
+                created_at, 
+                updated_at, 
+                rawtext 
+                FROM ${tablename} WHERE [user] = ?`;
+    },
+    ENUMERATE_ITEMS_ON_USER_AND_TEXT: tablename => {
+        return `SELECT id, 
+                user, 
+                created_at, 
+                updated_at, 
+                rawtext 
+                FROM ${tablename} 
+                WHERE [user] = ? 
+                AND [rawtext] = ?`
+    },
+    QUERY_DELETE_ITEM_BY_ID: tablename => {
+        return `DELETE FROM ${tablename} WHERE [id] = ?`;
+    },
+    COUNT_EXIST_ITEMS: tablename => {
+        return `SELECT count(*) FROM ${tablename} WHERE [user] = ?`;
     }
 }
 
-
-var QUERY_CREATE_TABLE = 'CREATE TABLE itemstorage([id] [INTEGER] PRIMARY KEY AUTOINCREMENT NOT NULL, [user] [TEXT] NOT NULL, [created_at] [TEXT] NOT NULL, [updated_at] [TEXT] NOT NULL, [rawtext] [TEXT] NOT NULL )';
-var QUERY_INSERT_ITEM = 'INSERT INTO itemstorage(user, created_at, updated_at, rawtext) VALUES( ?, ?, ?, ? )';
-var QUERY_UPDATE_ITEM = 'UPDATE itemstorage SET rawtext=?, updated_at=? WHERE [id] = ?';
-var QUERY_ENUMERATE_ITEMS_BY_ID = 'SELECT id, user, created_at, updated_at, rawtext FROM itemstorage WHERE [id] = ?';
-var QUERY_ENUMERATE_ITEMS_ON_USER = 'SELECT id, user, created_at, updated_at, rawtext FROM itemstorage WHERE [user] = ?';
-var QUERY_ENUMERATE_ITEMS_ON_USER_AND_TEXT = 'SELECT id, user, created_at, updated_at, rawtext FROM itemstorage WHERE [user] = ? AND [rawtext] = ?';
-var QUERY_DELETE_ITEM_BY_ID = 'DELETE FROM itemstorage WHERE [id] = ?';
-var SQLITE_DATABASENAME = './db/mydb.sqlite3'; // node.exe server.jsの位置からの相対パスで指定。
-// exports.QUERY_CREATE_TABLE = QUERY_CREATE_TABLE;
-// exports.QUERY_INSERT_ITEM = QUERY_INSERT_ITEM;
+const SQLITE_DATABASENAME = process.env.TABLE_NAME; // node.exe server.jsの位置からの相対パスで指定。
 
 
-var sqlite3 = new Factory4Hook(require('sqlite3'));
+const sqlite3 = new Factory4Hook(require('sqlite3'));
 
 
 var _openSqlite3 = function ( databaseName ) {
+    console.log(Factory4Hook)
     return new Promise(function(resolve,reject){
         var sqlite = sqlite3.getInstance().verbose();
         var db = new sqlite.Database( databaseName, (err)=>{
@@ -81,7 +122,7 @@ var _querySqlite3 = function (db, queryText, params) {
 var _countExistItems = function (db, userName) {
     return _querySqlite3(
             db,
-            'SELECT count(*) FROM itemstorage WHERE [user] = ?',
+            QUERYS.COUNT_EXIST_ITEMS,
             [userName]
     ).catch((result)=>{
         var db = result.db;
@@ -105,25 +146,25 @@ var _countExistItems = function (db, userName) {
 };
 
 
-var _insertItemAndGetId = function (db, userName, create, update, text) {
+var _insertItemAndGetId = function (db, userName, create, update, title, text) {
     return _querySqlite3(
         db,
         QUERY_INSERT_ITEM,
-        [userName, create, update, text]
+        [userName, create, update, title, text]
     ).then(()=>{
         return _querySqlite3(
             db,
             QUERY_ENUMERATE_ITEMS_ON_USER_AND_TEXT,
-            [userName, text]
+            [userName, title, text]
         );
     });
 };
-var _insertOrNoteiceExist = function (db, userName, create, update, text, existedRows, numberOfExistItems) {
+var _insertOrNoteiceExist = function (db, userName, create, update, title, text, existedRows, numberOfExistItems) {
     var closeDb = closeSqlite3.getInstance();
 
     if(existedRows.length == 0){
         return _insertItemAndGetId(
-            db, userName, create, update, text
+            db, userName, create, update, title, text
         ).then((result)=>{
             var rows = result.rows;
             return closeDb(db)
@@ -133,6 +174,7 @@ var _insertOrNoteiceExist = function (db, userName, create, update, text, existe
                     'jsonData' : {
                         items : [{
                             'id' : rows[0].id,
+                            'title': title,
                             'text' : text,
                             'create' : create,
                             'update' : update
@@ -151,6 +193,7 @@ var _insertOrNoteiceExist = function (db, userName, create, update, text, existe
                 message: 'the item is already exist. if you want to edit, you should update command with the target id.',
                 items : [{
                     'id' : existedRows[0].id,
+                    'title' : existedRows[0].title,
                     'text' : existedRows[0].rawtext,
                     'create' : existedRows[0].create_at,
                     'update' : existedRows[0].updated_at
@@ -165,6 +208,7 @@ var _insertOrNoteiceExist = function (db, userName, create, update, text, existe
 var createItemAtUserName = function (userName, dataObj) {
     var openDb = openSqlite3.getInstance();
     var closeDb = closeSqlite3.getInstance();
+    var title = dataObj.title;
     var text = dataObj.text;
     var create = dataObj.create;
     var update = dataObj.update;
@@ -183,12 +227,12 @@ var createItemAtUserName = function (userName, dataObj) {
         return _querySqlite3(
             db,
             QUERY_ENUMERATE_ITEMS_ON_USER_AND_TEXT,
-            [userName, text]
+            [userName, title, text]
         ).then((result2)=>{
             var rows = result2.rows;
             return _insertOrNoteiceExist(
                 db, 
-                userName, create, update, text, 
+                userName, create, update, title, text, 
                 rows, numberOfExistItems
             );
         });
@@ -245,6 +289,7 @@ var enumerateItemsByUserName = function ( userName ) {
             item = rows[i];
             list.push({
                 id : item.id,
+                title : item.title,
                 text : item.rawtext,
                 create : item.created_at,
                 update : item.updated_at
@@ -299,7 +344,7 @@ var updateItemAtUserName = function (userName, dataObj, itemId) {
         return _querySqlite3(
             db,
             QUERY_UPDATE_ITEM,
-            [ text, update, itemId ]
+            [ title, text, update, itemId ]
         );
     }).then((result)=>{
         var db = result.db;
@@ -310,6 +355,7 @@ var updateItemAtUserName = function (userName, dataObj, itemId) {
                 'jsonData' : {
                     items : [{
                         'id' : itemId,
+                        'title' : title,
                         'text' : text,
                         'create' : create,
                         'update' : update
