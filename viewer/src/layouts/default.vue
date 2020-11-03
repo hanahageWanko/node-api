@@ -35,14 +35,14 @@
       <v-btn @click.stop="fixed = !fixed" icon>
         <v-icon>mdi-minus</v-icon>
       </v-btn>
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title v-text="userName" />
       <v-spacer />
       <v-btn @click.stop="rightDrawer = !rightDrawer" icon>
         <v-icon>mdi-menu</v-icon>
       </v-btn>
     </v-app-bar>
     <v-content>
-      <v-container>
+      <v-container fluid>
         <nuxt />
       </v-container>
     </v-content>
@@ -88,6 +88,17 @@ export default {
       rightDrawer: false,
       title: 'Vuetify.js'
     }
+  },
+  computed: {
+    userName() {
+      return this.$store.state.user.userName
+    }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.container {
+  padding: 0;
+}
+</style>
