@@ -16,7 +16,7 @@ const NoteItem = function(rowtext, id, createDateMiliSec) {
   this.styleStr = ''
 }
 NoteItem.prototype.toggleTextStyle = function(styleStr) {
-  this.styleStr = this.styleStr.length == 0 ? styleStr : ''
+  this.styleStr = this.styleStr.length === 0 ? styleStr : ''
 }
 const createNoteItem = function(rowtext, id, createDateMiliSec) {
   return new NoteItem(rowtext, id, createDateMiliSec)

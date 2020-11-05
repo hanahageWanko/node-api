@@ -1,5 +1,5 @@
 /**
- * [api.js]
+ * [todoList.js]
  * encoding=UTF-8
  */
 
@@ -9,7 +9,7 @@ var router = express.Router();
 var Factory4Hook = require('../../factory4hook.js').Factory4Hook;
 
 var itemsSingleton = new Factory4Hook(require('../../api/v1/crud_items'));
-// var items = require('../api_v1/items');
+// var items = require('../_v1/items');
 
 if( process.env.NODE_ENV == 'test' ){
 	// routerの場合は、module.exports がそのままrouterで置き換えらえる仕様なので、
@@ -44,7 +44,7 @@ var _sendResponseAferPromise = function (targetPromise, res) {
 	});
 };
 
-// `/api/v1` continuing...
+// `//v1` continuing...
 // router.get('/users/USER-NAME/items', function (req, res) {
 router.get('/users/:userId/items', function (req, res) {
 	var enumerateItemsByUserName = itemsSingleton.getInstance().enumerateItemsByUserName;

@@ -9,65 +9,57 @@
         :glossaryDetail="CurrentGlossary[0]"
       />
       <GlossaryAddForm v-else/> -->
-    <div>
-      <signUp v-if="!userName" />
-      <div id="id_section_main" v-else>
-        <!-- サインアップ後のメイン画面 -->
-        <div>
-          <!-- アコーディオンメニューを後でやる時 -->
+    <signUp v-if="!$route.query.user" />
+    <div v-else>
+      <!-- サインアップ後のメイン画面 -->
+      <!-- アコーディオンメニューを後でやる時 -->
+      <!-- <div>
+        <div
+          id="id_setup_panel"
+          v-on:click="toggleCtrlPanel"
+          class="cls_toggle_expand_collapse"
+        >
+          {{ 'オプション（＠' + userName + 'さん）' }}
+        </div>
+        <transition name="trans_slide">
           <div
-            id="id_setup_panel"
-            v-on:click="toggleCtrlPanel"
-            class="cls_toggle_expand_collapse"
+            id="id_setup_transslide"
+            v-if="isPanelShow"
+            class="menu_slide_accordion"
           >
-            {{ 'オプション（＠' + userName + 'さん）' }}
+            ここにオプションのパネルを追加。
           </div>
-          <transition name="trans_slide">
-            <!-- slideDown() / slideUp() のように上下に開閉するアコーディオンメニューのエリア -->
-            <div
-              id="id_setup_transslide"
-              v-if="isPanelShow"
-              class="menu_slide_accordion"
-            >
-              ここにオプションのパネルを追加。
-            </div>
-          </transition>
-          <br />
+      </div> -->
+      <div class="glossary-form">
+        <div class="textbox">
+          <input v-model="inputTitie" type="text" />
         </div>
-        <div id="id_input_area">
-          <div id="id_input_textarea">
-            <textarea
-              v-model="input_message"
-              placeholder="ここに入力する。複数行可。"
-            ></textarea>
-          </div>
-          <div id="id_input_command">
-            <div id="id_input_additional">リストに追加する</div>
-            <div id="id_input_button" v-on:click="clickInputButton">
-              <a href="#"><i class="fas fa-pen fa-2x"></i></a>
+        <div class="textbox">
+          <textarea
+            v-model="inputText"
+            placeholder="ここに入力する。複数行可。"
+          ></textarea>
+        </div>
+        <div>
+          <div @click="clickInputButton">リストに追加する</div>
+        </div>
+      </div>
+      <div id="id_todolist">
+        <ul>
+          <li v-for="(item, index) in todoList" v-bind:key="index">
+            <!-- (要素、配列番号)で受け取れる仕様 -->
+            <div v-on:click="clickItem(index)" class="item_text">
+              <span v-bind:style="item.styleStr">{{ item.text }}</span>
+            </div>
+            <div class="item_date">{{ item.dateStr }}</div>
+            <div v-on:click="clickDeleteButton(index)">
+              <a href="#"><i class="fas fa-trash-alt"></i></a>
               <!-- 
-                            <input type="button" value="追加"></input> 
-                        -->
+                              <input type="button" value="削除"></input> 
+                          -->
             </div>
-          </div>
-        </div>
-        <div id="id_todolist">
-          <ul>
-            <li v-for="(item, index) in todo_list" v-bind:key="index">
-              <!-- (要素、配列番号)で受け取れる仕様 -->
-              <div v-on:click="clickItem(index)" class="item_text">
-                <span v-bind:style="item.styleStr">{{ item.text }}</span>
-              </div>
-              <div class="item_date">{{ item.dateStr }}</div>
-              <div v-on:click="clickDeleteButton(index)">
-                <a href="#"><i class="fas fa-trash-alt"></i></a>
-                <!-- 
-                                <input type="button" value="削除"></input> 
-                            -->
-              </div>
-            </li>
-          </ul>
-        </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -77,8 +69,6 @@
 import signUp from '@/components/signUp'
 
 // import axios from 'axios'
-// import ItemStorage from '@/plugins/itemStorage.js';
-// import userKeyManager from '@/plugins/userKey.js';
 import { mapState } from 'vuex'
 export default {
   name: 'App', // 「el : "#id_app1"」としていた部分。
@@ -91,8 +81,9 @@ export default {
       setuppanel_text: 'オプションはこちら',
       keyName: 'user',
       itemStorage: null,
-      input_message: '',
-      todo_list: [],
+      inputText: '',
+      inputTitie: '',
+      todoList: [],
       targetKey: '',
       isPanelShow: false
     }
@@ -100,40 +91,44 @@ export default {
   computed: {
     ...mapState({
       GlossaryState: (state) => state.glossary.GlossaryState,
-      CurrentGlossary: (state) => state.glossary.CurrentGlossary,
-      userName: (state) => state.user.userName
+      CurrentGlossary: (state) => state.glossary.CurrentGlossary
     })
   },
   created() {
     if (this.$route.query.user) {
+      console.log(this.$route.query.user)
       // console.log(this.$route.query.user)
       this.$store.dispatch('user/setUserName', this.$route.query.user)
     }
   },
   mounted() {
     // this.isPanelShow = true;
+    console.log(this.$ItemStorage('v', 'x'))
   },
   methods: {
     toggleCtrlPanel() {
       this.isPanelShow = !this.isPanelShow
     },
     clickInputButton() {
-      const newText = this.input_message
+      const newText = this.inputText
+      const newTitle = this.inputTitie
+      console.log(newTitle)
+      console.log(newText)
       if (newText.length > 0) {
         this.itemStorage.add(newText).then((createdItem) => {
-          this.todo_list.push(createdItem)
+          this.todoList.push(createdItem)
         })
         this.input_message = ''
       }
     },
     clickItem(index) {
-      this.todo_list[index].toggleTextStyle('text-decoration: line-through;')
+      this.todoList[index].toggleTextStyle('text-decoration: line-through;')
       // ToDo: クリックでのトグル動作時の扱いを『暫定』としたいので、このような実装にする。
     },
     clickDeleteButton(index) {
-      const targetId = this.todo_list[index].id
+      const targetId = this.todoList[index].id
       this.itemStorage.remove(targetId).then(() => {
-        this.todo_list.splice(index, 1)
+        this.todoList.splice(index, 1)
       })
     }
   }

@@ -21,7 +21,9 @@ export default {
   components: {
     UiButton
   },
-  props: ['glossaryDetail'],
+  props: {
+    glossaryDetail: { type: Object, default: () => ({}) }
+  },
   data() {
     return {}
   },

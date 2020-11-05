@@ -1,6 +1,6 @@
 const colors = require('vuetify/es5/util/colors').default
 
-module.exports = {
+export default {
   ssr: false,
   srcDir: 'src',
   telemetry: false,
@@ -33,12 +33,11 @@ module.exports = {
     //   sass: {
     //     prependData: `@import "@/scss/_variables.scss";`
     //   }
-
   ],
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['@/plugins/itemStorage', '@/plugins/api'],
   /*
    ** Nuxt.js dev-modules
    */

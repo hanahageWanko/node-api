@@ -17,7 +17,9 @@
 <script>
 export default {
   name: 'GlossaryList',
-  props: ['glossarys'],
+  props: {
+    glossarys: { type: Object, default: () => ({}) }
+  },
   data() {
     return {}
   },
