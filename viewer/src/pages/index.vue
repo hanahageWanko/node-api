@@ -97,13 +97,8 @@ export default {
   created() {
     if (this.$route.query.user) {
       console.log(this.$route.query.user)
-      // console.log(this.$route.query.user)
       this.$store.dispatch('user/setUserName', this.$route.query.user)
     }
-  },
-  mounted() {
-    // this.isPanelShow = true;
-    console.log(this.$ItemStorage('v', 'x'))
   },
   methods: {
     toggleCtrlPanel() {
@@ -115,7 +110,8 @@ export default {
       console.log(newTitle)
       console.log(newText)
       if (newText.length > 0) {
-        this.itemStorage.add(newText).then((createdItem) => {
+        console.log(this.$ItemStorage)
+        this.$ItemStorage.add(newText).then((createdItem) => {
           this.todoList.push(createdItem)
         })
         this.input_message = ''
