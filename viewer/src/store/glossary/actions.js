@@ -1,6 +1,6 @@
 const actions = {
-  getGlossary({ commit }) {
-    commit('setGlossaryMutation')
+  getGlossary({ commit }, glossary) {
+    commit('setGlossaryMutation', glossary)
   },
   getDetail({ commit }, id) {
     commit('setDetailMutation', id)

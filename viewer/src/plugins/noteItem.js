@@ -3,14 +3,14 @@
  *
  */
 
-const NoteItem = function(rowtext, id, createDateMiliSec) {
+const NoteItem = function(data) {
   const now = new Date()
-  if (createDateMiliSec) {
-    now.setTime(createDateMiliSec)
+  if (this.createDateMiliSec) {
+    now.setTime(this.createDateMiliSec)
   }
 
-  this.text = rowtext
-  this.id = id
+  this.text = data.text
+  this.id = data.id
   this.create = now.getTime().toString()
   this.dateStr = now.toString()
   this.styleStr = ''
@@ -18,8 +18,8 @@ const NoteItem = function(rowtext, id, createDateMiliSec) {
 NoteItem.prototype.toggleTextStyle = function(styleStr) {
   this.styleStr = this.styleStr.length === 0 ? styleStr : ''
 }
-const createNoteItem = function(rowtext, id, createDateMiliSec) {
-  return new NoteItem(rowtext, id, createDateMiliSec)
+const createNoteItem = function(data) {
+  return new NoteItem(data)
 }
 
 export { createNoteItem as default }

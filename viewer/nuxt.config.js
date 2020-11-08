@@ -1,12 +1,14 @@
 const colors = require('vuetify/es5/util/colors').default
 
 require('dotenv').config()
-const { API_END_POINT } = process.env
 
 module.exports = {
   ssr: false,
   srcDir: 'src',
   telemetry: false,
+  env: {
+    API_END_POINT: process.env.API_END_POINT
+  },
   /*
    ** Headers of the page
    */
@@ -47,7 +49,8 @@ module.exports = {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxtjs/dotenv'
   ],
   /*
    ** Nuxt.js modules
@@ -82,9 +85,6 @@ module.exports = {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
-  },
-  env: {
-    API_END_POINT
   },
   server: {
     port: 8000, // デフォルト: 3000

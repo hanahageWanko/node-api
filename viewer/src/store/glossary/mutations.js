@@ -1,10 +1,8 @@
 import api from '@/plugins/api'
 
 export default {
-  setGlossaryMutation: async (state) => {
-    const response = await api.getGlossaryList()
-    const { data } = response
-    state.GlossaryState.push(...data)
+  setGlossaryMutation: async (state, glossary) => {
+    await state.GlossaryList.push(...glossary)
   },
   setDetailMutation: async (state, id) => {
     const response = await api.getGlossary(id)
@@ -17,21 +15,21 @@ export default {
   addGlossaryMutation: async (state, glossary) => {
     const response = await api.addGlossary(glossary)
     const { data } = response
-    state.GlossaryState.push(data)
+    state.GlossaryList.push(data)
   },
   updadateGlossaryMutation: async (state, glossary) => {
     await api.updateGlossary(glossary, glossary.id)
-    for (let i = 0; i < state.GlossaryState.length; i++) {
-      if (state.GlossaryState[i].id === glossary.id) {
-        state.GlossaryState.splice(i, 1, glossary)
+    for (let i = 0; i < state.GlossaryList.length; i++) {
+      if (state.GlossaryList[i].id === glossary.id) {
+        state.GlossaryList.splice(i, 1, glossary)
       }
     }
   },
   deleteGlossaryMutation: async (state, id) => {
     await api.deleteGlossary(id)
-    for (let i = 0; i < state.GlossaryState.length; i++) {
-      if (state.GlossaryState[i].id === id) {
-        state.GlossaryState.splice(i, 1)
+    for (let i = 0; i < state.GlossaryList.length; i++) {
+      if (state.GlossaryList[i].id === id) {
+        state.GlossaryList.splice(i, 1)
       }
     }
   }

@@ -46,7 +46,7 @@
       </div>
       <div id="id_todolist">
         <ul>
-          <li v-for="(item, index) in todoList" v-bind:key="index">
+          <li v-for="(item, index) in GlossaryList" v-bind:key="index">
             <!-- (要素、配列番号)で受け取れる仕様 -->
             <div v-on:click="clickItem(index)" class="item_text">
               <span v-bind:style="item.styleStr">{{ item.text }}</span>
@@ -90,7 +90,7 @@ export default {
   },
   computed: {
     ...mapState({
-      GlossaryState: (state) => state.glossary.GlossaryState,
+      GlossaryList: (state) => state.glossary.GlossaryList,
       CurrentGlossary: (state) => state.glossary.CurrentGlossary,
       UserName: (state) => state.user.userName
     })
@@ -99,6 +99,7 @@ export default {
     if (this.$route.query.user) {
       console.log(this.$route.query.user)
       this.$store.dispatch('user/setUserName', this.$route.query.user)
+      this.$ItemStorage.fetch(this.UserName)
     }
   },
   methods: {
