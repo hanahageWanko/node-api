@@ -12,8 +12,16 @@ var NODE_ENV_TEST_KEYWORD = 'test';
 var Factory4Hook = function( staticInstance ){
     this.instance = staticInstance;
     this.originalInstance = this.instance;
+    // console.log('this.instance')
+    // console.log(this.instance)
+    // console.log('this.originalInstance')
+    // console.log(this.originalInstance)
 };
 Factory4Hook.prototype.getInstance = function(){
+    // console.log('inFactory.getInstance')
+    // console.log(this.instance)
+    // console.log('this.instance')
+    // console.log(this.instance)
     return this.instance;
 };
 if( process.env.NODE_ENV == NODE_ENV_TEST_KEYWORD ){

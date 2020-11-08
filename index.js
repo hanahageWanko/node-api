@@ -7,6 +7,7 @@
 const app = require('./src/app');
 // import http from 'http';
 const debug = require('debug')('myapp:server');
+require('dotenv').config();
 
 
 /**

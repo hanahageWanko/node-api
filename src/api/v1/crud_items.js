@@ -1,7 +1,7 @@
-/**
- * [crud_items.js]
- * encoding=UTF-8
- */
+
+const path = require('path')
+const dbPath = path.resolve(__dirname, '../../db/mydb.sqlite3')
+
 const Factory4Hook = require('../../factory4hook.js').Factory4Hook;
 const QUERYS = {
     CREATE_TABLE: tablename => {
@@ -10,18 +10,21 @@ const QUERYS = {
                 [user] [TEXT] NOT NULL, 
                 [created_at] [TEXT] NOT NULL, 
                 [updated_at] [TEXT] NOT NULL, 
+                [title] [TEXT] NOT NULL,
                 [rawtext] [TEXT] NOT NULL )`;
     },
-    INSEDRT_ITEM: tablename => {
+    INSERT_ITEM: tablename => {
         return `INSERT INTO ${tablename}(
                 user, 
                 created_at, 
-                updated_at, 
+                updated_at,
+                title,
                 rawtext) 
-                VALUES( ?, ?, ?, ? )`;
+                VALUES( ?, ?, ?, ?, ? )`;
     },
     UPDATE_ITEM: tablename => {
         return `UPDATE ${tablename} SET 
+                title=?,
                 rawtext=?, 
                 updated_at=? 
                 WHERE [id] = ?`;
@@ -31,6 +34,7 @@ const QUERYS = {
                 user, 
                 created_at, 
                 updated_at, 
+                title,
                 rawtext 
                 FROM ${tablename} WHERE [id] = ?`;
     },
@@ -39,6 +43,7 @@ const QUERYS = {
                 user, 
                 created_at, 
                 updated_at, 
+                title,
                 rawtext 
                 FROM ${tablename} WHERE [user] = ?`;
     },
@@ -47,12 +52,12 @@ const QUERYS = {
                 user, 
                 created_at, 
                 updated_at, 
+                title,
                 rawtext 
                 FROM ${tablename} 
-                WHERE [user] = ? 
-                AND [rawtext] = ?`
+                WHERE [user] = ? AND [title] = ? AND [rawtext] = ?`
     },
-    QUERY_DELETE_ITEM_BY_ID: tablename => {
+    DELETE_ITEM_BY_ID: tablename => {
         return `DELETE FROM ${tablename} WHERE [id] = ?`;
     },
     COUNT_EXIST_ITEMS: tablename => {
@@ -60,27 +65,34 @@ const QUERYS = {
     }
 }
 
-const SQLITE_DATABASENAME = process.env.TABLE_NAME; // node.exe server.jsの位置からの相対パスで指定。
 
 
 const sqlite3 = new Factory4Hook(require('sqlite3'));
 
 
+
 var _openSqlite3 = function ( databaseName ) {
-    console.log(Factory4Hook)
+    console.log(`------------- open --------------`)
+    // console.log('_openSqlite3')
+    // console.log(Factory4Hook)
     return new Promise(function(resolve,reject){
         var sqlite = sqlite3.getInstance().verbose();
-        var db = new sqlite.Database( databaseName, (err)=>{
+        var db = new sqlite.Database(dbPath, (err)=>{
             if( !err ){
+                console.log(db)
                 resolve( db );
             }else{
                 reject(err);
             }
         });
+        // console.log('db')
+        // console.log(db)
     });
 };
 var _closeSqlite3 = function (db) {
-    return new Promise(function(resolve,reject){
+    console.log(`------------- close --------------`)
+
+    return new Promise(function(resolve,reject){    
 		db.close((err)=>{
 			if(!err){
 				resolve();
@@ -97,6 +109,10 @@ if( process.env.NODE_ENV == 'test' ){
     exports.closeSqlite3 = closeSqlite3;
 }
 var _querySqlite3 = function (db, queryText, params) {
+    
+    console.log(db)
+    console.log(queryText)
+    console.log(params)
     return new Promise(function (resolve,reject) {
         db.all(
             queryText, 
@@ -120,9 +136,11 @@ var _querySqlite3 = function (db, queryText, params) {
 
 
 var _countExistItems = function (db, userName) {
+    console.log(`------------- _countExistItems --------------`)
+
     return _querySqlite3(
             db,
-            QUERYS.COUNT_EXIST_ITEMS,
+            QUERYS.COUNT_EXIST_ITEMS(process.env.SQLITE_TABLE_NAME),
             [userName]
     ).catch((result)=>{
         var db = result.db;
@@ -132,7 +150,7 @@ var _countExistItems = function (db, userName) {
         if( -1 < errMessage.indexOf("no such table") ){
             return _querySqlite3(
                 db,
-                QUERYS.CREATE_TABLE,
+                QUERYS.CREATE_TABLE(process.env.SQLITE_TABLE_NAME),
                 []
             );
         }else{
@@ -147,19 +165,22 @@ var _countExistItems = function (db, userName) {
 
 
 var _insertItemAndGetId = function (db, userName, create, update, title, text) {
+    console.log(`------------- _insertItemAndGetId --------------`)
     return _querySqlite3(
         db,
-        QUERY_INSERT_ITEM,
+        QUERYS.INSERT_ITEM(process.env.SQLITE_TABLE_NAME),
         [userName, create, update, title, text]
     ).then(()=>{
         return _querySqlite3(
             db,
-            QUERY_ENUMERATE_ITEMS_ON_USER_AND_TEXT,
+            QUERYS.ENUMERATE_ITEMS_ON_USER_AND_TEXT(process.env.SQLITE_TABLE_NAME),
             [userName, title, text]
         );
     });
 };
 var _insertOrNoteiceExist = function (db, userName, create, update, title, text, existedRows, numberOfExistItems) {
+    console.log(`------------- _insertOrNoteiceExist --------------`)
+
     var closeDb = closeSqlite3.getInstance();
 
     if(existedRows.length == 0){
@@ -206,6 +227,8 @@ var _insertOrNoteiceExist = function (db, userName, create, update, title, text,
 };
 
 var createItemAtUserName = function (userName, dataObj) {
+    console.log(`------------- createItemAtUserName --------------`)
+
     var openDb = openSqlite3.getInstance();
     var closeDb = closeSqlite3.getInstance();
     var title = dataObj.title;
@@ -215,7 +238,7 @@ var createItemAtUserName = function (userName, dataObj) {
 
     // console.log('create item [' + text + '] at ' + userName);
 
-    var promise = openDb(SQLITE_DATABASENAME);
+    var promise = openDb(dbPath);
     promise = promise.then((db)=>{
         return _countExistItems(db, userName);
     }).then((result)=>{
@@ -226,7 +249,7 @@ var createItemAtUserName = function (userName, dataObj) {
 
         return _querySqlite3(
             db,
-            QUERY_ENUMERATE_ITEMS_ON_USER_AND_TEXT,
+            QUERYS.ENUMERATE_ITEMS_ON_USER_AND_TEXT(process.env.SQLITE_TABLE_NAME),
             [userName, title, text]
         ).then((result2)=>{
             var rows = result2.rows;
@@ -254,15 +277,17 @@ exports.createItemAtUserName = createItemAtUserName;
 
 
 var enumerateItemsByUserName = function ( userName ) {
+    console.log(`------------- enumerateItemsByUserName --------------`)
+
     var openDb = openSqlite3.getInstance();
     var closeDb = closeSqlite3.getInstance();
 
     // console.log("enumerate items by :id = " + userName );
-    var promise = openDb(SQLITE_DATABASENAME);
+    var promise = openDb(dbPath);
     promise = promise.then((db)=>{
         return _querySqlite3(
             db,
-            QUERY_ENUMERATE_ITEMS_ON_USER,
+            QUERYS.ENUMERATE_ITEMS_ON_USER(process.env.SQLITE_TABLE_NAME),
             [userName]
         );
     }).catch(err => {
@@ -325,6 +350,8 @@ exports.enumerateItemsByUserName = enumerateItemsByUserName;
 
 
 var updateItemAtUserName = function (userName, dataObj, itemId) {
+    console.log(`------------- updateItemAtUserName --------------`)
+
     var openDb = openSqlite3.getInstance();
     var closeDb = closeSqlite3.getInstance();
 
@@ -332,18 +359,18 @@ var updateItemAtUserName = function (userName, dataObj, itemId) {
     var create = dataObj.create;
     var update = dataObj.update;
 
-    var promise = openDb(SQLITE_DATABASENAME);
+    var promise = openDb(dbPath);
     promise = promise.then((db)=>{
         return _querySqlite3(
             db,
-            QUERY_ENUMERATE_ITEMS_BY_ID,
+            QUERYS.ENUMERATE_ITEMS_BY_ID(process.env.SQLITE_TABLE_NAME),
             [ itemId ]
         );
     }).then((result)=>{
         var db = result.db;
         return _querySqlite3(
             db,
-            QUERY_UPDATE_ITEM,
+            QUERYS.UPDATE_ITEM(process.env.SQLITE_TABLE_NAME),
             [ title, text, update, itemId ]
         );
     }).then((result)=>{
@@ -372,14 +399,16 @@ exports.updateItemAtUserName = updateItemAtUserName;
 
 
 var deleteItemAtUserName = function (userName, itemId) {
+    console.log(`------------- deleteItemAtUserName --------------`)
+
     var openDb = openSqlite3.getInstance();
     var closeDb = closeSqlite3.getInstance();
 
-    var promise = openDb(SQLITE_DATABASENAME);
+    var promise = openDb(dbPath);
     promise = promise.then((db)=>{
         return _querySqlite3(
             db,
-            QUERY_ENUMERATE_ITEMS_BY_ID,
+            QUERYS.ENUMERATE_ITEMS_BY_ID(process.env.SQLITE_TABLE_NAME),
             [ itemId ]
         );
     }).then((result)=>{
@@ -402,7 +431,7 @@ var deleteItemAtUserName = function (userName, itemId) {
 
         return _querySqlite3(
             db,
-            QUERY_DELETE_ITEM_BY_ID,
+            QUERYS.DELETE_ITEM_BY_ID(process.env.SQLITE_TABLE_NAME),
             [ itemId ]
         ).then(()=>{
             return closeDb(db)

@@ -1,16 +1,44 @@
+import axios from 'axios'
 import createNoteItem from './noteItem'
-const API_URL = 'http://localhost:3000/api/v1/'
+
+const HTTP = axios.create({
+  baseURL: process.env.API_END_POINT
+})
+
 console.log('in')
 
-const ItemStorage = function(axiosInstance, userName) {
-  this.userName = userName
-  this.axiosInstance = axiosInstance
-  this.targetUrl = API_URL + this.userName + '/items'
-  this.original = []
-  console.log(this.userName)
-  console.log(this.axiosClient)
-  console.log(this.targetUrl)
-  console.log(this.original)
+const ItemStorage = {
+  add: (userName, postData) => {
+    console.log(userName)
+    console.log(postData)
+    const today = new Date()
+    const createTime = today.getTime().toString()
+    const targetUrl = `http://localhost:3000/api/v1/users/${userName}/items`
+    return axios
+      .post(
+        targetUrl,
+        {
+          title: postData.title,
+          text: postData.text,
+          create: createTime,
+          update: createTime
+        }
+        /* .set({'x-api-key' : 'foobar'}) */
+      )
+      .then((result) => {
+        console.log(result)
+        console.log(targetUrl)
+        console.log(HTTP)
+        const responsedata = result.data
+        const items = responsedata.items
+        const item = items[0]
+        const id = item.id
+        const addedItem = createNoteItem(postData, id, createTime)
+
+        this.original.push(addedItem)
+        return Promise.resolve(addedItem)
+      })
+  }
 }
 
 ItemStorage.fetch = () => {
@@ -38,33 +66,7 @@ ItemStorage.fetch = () => {
   // エラー応答のフォーマットは以下の公式さんを参照の事。
   // https://github.com/axios/axios#handling-errors
 }
-ItemStorage.add = function(text) {
-  console.log(text)
-  console.log('123456')
-  const today = new Date()
-  const createTime = today.getTime().toString()
-  return this.axiosClient
-    .post(
-      this.targetUrl,
-      {
-        // postData
-        text,
-        create: createTime,
-        update: createTime
-      }
-      /* .set({'x-api-key' : 'foobar'}) */
-    )
-    .then((result) => {
-      const responsedata = result.data
-      const items = responsedata.items
-      const item = items[0]
-      const id = item.id
-      const addedItem = createNoteItem(text, id, createTime)
 
-      this.original.push(addedItem)
-      return Promise.resolve(addedItem)
-    })
-}
 ItemStorage.remove = function(targetId) {
   return this.axiosClient
     .delete(this.targetUrl + '/' + targetId)

@@ -91,7 +91,8 @@ export default {
   computed: {
     ...mapState({
       GlossaryState: (state) => state.glossary.GlossaryState,
-      CurrentGlossary: (state) => state.glossary.CurrentGlossary
+      CurrentGlossary: (state) => state.glossary.CurrentGlossary,
+      UserName: (state) => state.user.userName
     })
   },
   created() {
@@ -107,11 +108,12 @@ export default {
     clickInputButton() {
       const newText = this.inputText
       const newTitle = this.inputTitie
-      console.log(newTitle)
-      console.log(newText)
-      if (newText.length > 0) {
-        console.log(this.$ItemStorage)
-        this.$ItemStorage.add(newText).then((createdItem) => {
+      const postData = {
+        title: newTitle,
+        text: newText
+      }
+      if (postData.title !== '' && postData.text !== '') {
+        this.$ItemStorage.add(this.UserName, postData).then((createdItem) => {
           this.todoList.push(createdItem)
         })
         this.input_message = ''

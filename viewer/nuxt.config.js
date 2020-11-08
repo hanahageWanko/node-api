@@ -1,6 +1,9 @@
 const colors = require('vuetify/es5/util/colors').default
 
-export default {
+require('dotenv').config()
+const { API_END_POINT } = process.env
+
+module.exports = {
   ssr: false,
   srcDir: 'src',
   telemetry: false,
@@ -79,6 +82,9 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
+  },
+  env: {
+    API_END_POINT
   },
   server: {
     port: 8000, // デフォルト: 3000
