@@ -44,20 +44,17 @@
           <div @click="clickInputButton">リストに追加する</div>
         </div>
       </div>
-      <div id="id_todolist">
-        <ul>
-          <li v-for="(item, index) in GlossaryList" v-bind:key="index">
+      <div>
+        <ul class="glossary-list">
+          <li
+            v-for="(item, index) in GlossaryList"
+            v-bind:key="index"
+            class="glossary-list-item"
+          >
             <!-- (要素、配列番号)で受け取れる仕様 -->
-            <div v-on:click="clickItem(index)" class="item_text">
-              <span v-bind:style="item.styleStr">{{ item.text }}</span>
-            </div>
+            <div class="glossary-list-item-title">{{ item.title }}</div>
+            <div class="glossary-list-item-text">{{ item.text }}</div>
             <div class="item_date">{{ item.dateStr }}</div>
-            <div v-on:click="clickDeleteButton(index)">
-              <a href="#"><i class="fas fa-trash-alt"></i></a>
-              <!-- 
-                              <input type="button" value="削除"></input> 
-                          -->
-            </div>
           </li>
         </ul>
       </div>
@@ -121,7 +118,7 @@ export default {
       }
     },
     clickItem(index) {
-      this.todoList[index].toggleTextStyle('text-decoration: line-through;')
+      // this.todoList[index].toggleTextStyle('text-decoration: line-through;')
       // ToDo: クリックでのトグル動作時の扱いを『暫定』としたいので、このような実装にする。
     },
     clickDeleteButton(index) {
