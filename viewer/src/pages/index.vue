@@ -44,20 +44,40 @@
           <div @click="clickInputButton">リストに追加する</div>
         </div>
       </div>
-      <div>
-        <ul class="glossary-list">
-          <li
-            v-for="(item, index) in GlossaryList"
-            v-bind:key="index"
-            class="glossary-list-item"
-          >
-            <!-- (要素、配列番号)で受け取れる仕様 -->
-            <div class="glossary-list-item-title">{{ item.title }}</div>
-            <div class="glossary-list-item-text">{{ item.text }}</div>
-            <div class="item_date">{{ item.dateStr }}</div>
-          </li>
-        </ul>
-      </div>
+      <v-row class="glossary-list">
+        <v-col
+          v-for="(item, index) in GlossaryList"
+          :key="index"
+          cols="4"
+          class="glossary-list-item"
+        >
+          <v-card dark>
+            <v-card-title v-text="item.title" class="headline p-b-0" />
+            <v-card-text>
+              <div>{{ item.text }}</div>
+            </v-card-text>
+            <v-row align="center" class="d-flex" justify="end">
+              <v-col>
+                <v-card-text v-text="item.dateStr" />
+              </v-col>
+              <v-col cols="auto" class="p-0">
+                <v-row align="center">
+                  <v-col>
+                    <v-btn fab icon small>
+                      <v-icon>
+                        mdi-pencil
+                      </v-icon>
+                    </v-btn>
+                    <v-btn class="mr-5" fab icon small>
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>
@@ -145,19 +165,15 @@ h4 {
 }
 h1 {
   font-size: 300%;
-  margin-bottom: 20px;
 }
 h2 {
   font-size: 250%;
-  margin-bottom: 20px;
 }
 h3 {
   font-size: 200%;
-  margin-bottom: 20px;
 }
 h4 {
   font-size: 170%;
-  margin-bottom: 20px;
 }
 
 [class$='title'] {
@@ -214,6 +230,19 @@ strong {
 }
 
 .d-flex {
+  display: flex;
+  align-items: center;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.p-b-0 {
+  padding-bottom: 0;
+}
+
+.glossary-list-item {
   display: flex;
   align-items: center;
 }
