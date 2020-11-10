@@ -41,7 +41,7 @@
         <v-icon>mdi-menu</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-main>
+    <v-main class="main-wrapper">
       <v-container fluid>
         <nuxt />
       </v-container>
@@ -100,5 +100,8 @@ export default {
 <style lang="scss" scoped>
 .container {
   padding: 0;
+}
+.main-wrapper {
+  background: #272822;
 }
 </style>
