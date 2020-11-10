@@ -1,14 +1,17 @@
 <template>
   <div class="signup-section">
-    <!-- 初回サインアップ用 -->
-    <h2 class="font-great">Sign Up</h2>
-    <p>利用者名を入れてください（※3文字以上、16文字以内の英数字）。</p>
-    <div class="glossary-form d-flex">
+    <v-row>
+      <v-col>
+        <h2 class="font-great mb-6">Sign Up</h2>
+        <p>利用者名を入れてください（※3文字以上、16文字以内の英数字）。</p>
+      </v-col>
+    </v-row>
+    <v-row class="glossary-form d-flex">
       <div class="textbox">
         <input v-model="userNameInput" />
       </div>
       <UiButton v-show="userNameInput" @click="createAccount">更新</UiButton>
-    </div>
+    </v-row>
   </div>
 </template>
 
