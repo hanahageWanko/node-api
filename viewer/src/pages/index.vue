@@ -7,7 +7,6 @@
       :glossarys="GlossaryList"
       :username="UserName"
     />
-    {{ UserName }}
   </div>
 </template>
 <script>
@@ -28,18 +27,18 @@ export default {
       showGlossaryFlg: false
     }
   },
-  created() {
-    if (this.$route.query.user) {
-      this.showGlossaryFlg = true
-      this.$store.dispatch('user/setUserName', this.$route.query.user)
-    }
-  },
   computed: {
     ...mapState({
       GlossaryList: (state) => state.glossary.GlossaryList,
       CurrentGlossary: (state) => state.glossary.CurrentGlossary,
       UserName: (state) => state.user.userName
     })
+  },
+  created() {
+    if (this.$route.query.user) {
+      this.showGlossaryFlg = true
+      this.$store.dispatch('user/setUserName', this.$route.query.user)
+    }
   },
   methods: {
     showGlossary() {

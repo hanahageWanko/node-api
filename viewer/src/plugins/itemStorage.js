@@ -53,19 +53,22 @@ export default (context, inject) => {
         context.store.dispatch('glossary/getGlossary', glossaryList)
       })
     },
-    remove: (targetId) => {
-      return HTTP.delete(this.targetUrl + '/' + targetId).then((result) => {
-        const status = result.status
-        if (status === 200) {
-          this.original = this.original.filter((item) => {
-            const id = item.id
-            return id !== targetId
-          })
-          return Promise.resolve()
-        } else {
-          return Promise.reject(new Error('エラー'))
+    delete: (userName, targetId) => {
+      return HTTP.delete(targetUrl(userName) + '/' + targetId).then(
+        (result) => {
+          const status = result.status
+          if (status === 200) {
+            // this.original = this.original.filter((item) => {
+            //   const id = item.id
+            //   return id !== targetId
+            // })
+            context.store.dispatch('glossary/deleteGlossary', targetId)
+            return Promise.resolve()
+          } else {
+            return Promise.reject(new Error('エラー'))
+          }
         }
-      })
+      )
     }
   }
   inject('ItemStorage', ItemStorage)

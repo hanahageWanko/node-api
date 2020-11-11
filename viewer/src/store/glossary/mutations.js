@@ -14,7 +14,7 @@ export default {
   // },
   addGlossaryMutation: async (state, glossary) => {
     await state.GlossaryList.push(glossary)
-  }
+  },
   // updadateGlossaryMutation: async (state, glossary) => {
   //   await api.updateGlossary(glossary, glossary.id)
   //   for (let i = 0; i < state.GlossaryList.length; i++) {
@@ -23,12 +23,11 @@ export default {
   //     }
   //   }
   // },
-  // deleteGlossaryMutation: async (state, id) => {
-  //   await api.deleteGlossary(id)
-  //   for (let i = 0; i < state.GlossaryList.length; i++) {
-  //     if (state.GlossaryList[i].id === id) {
-  //       state.GlossaryList.splice(i, 1)
-  //     }
-  //   }
-  // }
+  deleteGlossaryMutation: async (state, id) => {
+    for (let i = 0; i < state.GlossaryList.length; i++) {
+      if (state.GlossaryList[i].id === id) {
+        await state.GlossaryList.splice(i, 1)
+      }
+    }
+  }
 }

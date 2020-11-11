@@ -26,18 +26,26 @@
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn @click.stop="miniVariant = !miniVariant" icon>
+      <v-btn
+        @click.stop="miniVariant = !miniVariant"
+        icon
+        class="text-capitalize"
+      >
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-btn @click.stop="clipped = !clipped" icon>
+      <v-btn @click.stop="clipped = !clipped" icon class="text-capitalize">
         <v-icon>mdi-application</v-icon>
       </v-btn>
-      <v-btn @click.stop="fixed = !fixed" icon>
+      <v-btn @click.stop="fixed = !fixed" icon class="text-capitalize">
         <v-icon>mdi-minus</v-icon>
       </v-btn>
       <v-toolbar-title v-text="userName" />
       <v-spacer />
-      <v-btn @click.stop="rightDrawer = !rightDrawer" icon>
+      <v-btn
+        @click.stop="rightDrawer = !rightDrawer"
+        icon
+        class="text-capitalize"
+      >
         <v-icon>mdi-menu</v-icon>
       </v-btn>
     </v-app-bar>

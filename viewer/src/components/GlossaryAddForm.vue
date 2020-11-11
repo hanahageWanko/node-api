@@ -16,7 +16,7 @@
       ></v-textarea>
       <v-row justify="end">
         <v-col cols="auto" class="pt-0">
-          <v-btn @click="clickInputButton" color="orange" dark>
+          <v-btn @click="clickInputButton" color="orange text-capitalize" dark>
             リストに追加する
           </v-btn>
         </v-col>

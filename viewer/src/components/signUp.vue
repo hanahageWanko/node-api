@@ -18,7 +18,7 @@
           @click="createAccount"
           color="orange"
           dark
-          class="mt-4"
+          class="mt-4 text-capitalize"
         >
           Sign in
         </v-btn>

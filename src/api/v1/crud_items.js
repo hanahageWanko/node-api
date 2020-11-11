@@ -104,9 +104,6 @@ if (process.env.NODE_ENV == "test") {
   exports.closeSqlite3 = closeSqlite3;
 }
 var _querySqlite3 = function(db, queryText, params) {
-  console.log(db);
-  console.log(queryText);
-  console.log(params);
   return new Promise(function(resolve, reject) {
     db.all(queryText, params, function(err, rows) {
       if (!err) {

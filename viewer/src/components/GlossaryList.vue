@@ -1,7 +1,5 @@
 <template>
   <v-row class="glossary-list">
-    {{ glossarys }}
-    <v-progress-linear indeterminate />
     <v-col
       v-for="(item, index) in glossarys"
       :key="index"
@@ -18,12 +16,18 @@
             <v-card-text v-text="item.dateStr" />
           </v-col>
           <v-col cols="auto" class="p-0">
-            <v-btn fab icon small>
+            <v-btn fab icon small class="text-capitalize">
               <v-icon>
                 mdi-pencil
               </v-icon>
             </v-btn>
-            <v-btn class="mr-5" fab icon small>
+            <v-btn
+              @click="deleteItem(item.id)"
+              fab
+              icon
+              small
+              class="mr-5 text-capitalize"
+            >
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </v-col>
@@ -39,7 +43,8 @@ export default {
   props: {
     glossarys: { type: Array, default: () => ({}) },
     username: {
-      type: String
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -48,6 +53,11 @@ export default {
   mounted() {
     // this.$store.dispatch('user/setUserName', this.$route.query.user)
     this.$ItemStorage.fetch(this.username)
+  },
+  methods: {
+    deleteItem(id) {
+      this.$ItemStorage.delete(this.username, id)
+    }
   }
 }
 </script>
