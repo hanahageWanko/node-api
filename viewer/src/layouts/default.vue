@@ -8,16 +8,17 @@
       app
     >
       <v-list>
-        <v-list-item
+        <v-list-item v-for="(item, i) in GlossaryList" :key="i" router exact>
+          <!-- <v-list-item
           v-for="(item, i) in items"
           :key="i"
           :to="item.to"
           router
           exact
-        >
-          <v-list-item-action>
+        > -->
+          <!-- <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
+          </v-list-item-action> -->
           <v-list-item-content>
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
@@ -26,19 +27,6 @@
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        @click.stop="miniVariant = !miniVariant"
-        icon
-        class="text-capitalize"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn @click.stop="clipped = !clipped" icon class="text-capitalize">
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn @click.stop="fixed = !fixed" icon class="text-capitalize">
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
       <v-toolbar-title v-text="userName" />
       <v-spacer />
       <v-btn
@@ -51,6 +39,7 @@
     </v-app-bar>
     <v-main class="main-wrapper">
       <v-container fluid>
+        {{ GlossaryList }}
         <nuxt />
       </v-container>
     </v-main>
@@ -100,6 +89,9 @@ export default {
   computed: {
     userName() {
       return this.$store.state.user.userName
+    },
+    GlossaryList() {
+      return this.$store.state.glossary.GlossaryList
     }
   }
 }

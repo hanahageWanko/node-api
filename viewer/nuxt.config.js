@@ -42,7 +42,7 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/itemStorage', '@/plugins/api'],
+  plugins: ['@/plugins/itemStorage'],
   /*
    ** Nuxt.js dev-modules
    */

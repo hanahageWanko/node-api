@@ -21,7 +21,6 @@ export default {
     GlossaryList
   },
   data() {
-    // オブジェクト{}で定義していた値を、「その値を返却する（無名）関数」に書き換える。
     return {
       createGlossaryFlg: false,
       showGlossaryFlg: false

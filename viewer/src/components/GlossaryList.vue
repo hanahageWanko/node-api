@@ -16,20 +16,19 @@
             <v-card-text v-text="item.dateStr" />
           </v-col>
           <v-col cols="auto" class="p-0">
-            <v-btn fab icon small class="text-capitalize">
+            <v-btn
+              @click="glossaryEditForm.flg = true"
+              fab
+              icon
+              small
+              class="text-capitalize"
+            >
               <v-icon>
                 mdi-pencil
               </v-icon>
             </v-btn>
-            <!-- <v-btn
-              @click="deleteItem(item.id)"
-              fab
-              icon
-              small
-              class="mr-5 text-capitalize"
-            > -->
             <v-btn
-              @click="openDialog()"
+              @click="deleteConfirmDialog.flg = true"
               fab
               icon
               small
@@ -37,25 +36,33 @@
             >
               <v-icon>mdi-delete</v-icon>
             </v-btn>
-            <confirmDialog
-              v-if="deleteConfirmDialog.flg"
-              @confirmDialogResponse="confirmDialogResponse($event, item.id)"
-              :title="deleteConfirmDialog.title"
-              :text="deleteConfirmDialog.text"
-            />
           </v-col>
         </v-row>
+        <GlossaryEditForm
+          v-if="glossaryEditForm.flg"
+          @updateItem="updateItem($event, item)"
+          :title="deleteConfirmDialog.title"
+          :glossary="item"
+        />
+        <ConfirmDialog
+          v-if="deleteConfirmDialog.flg"
+          @confirmDialogResponse="confirmDialogResponse($event, item.id)"
+          :title="deleteConfirmDialog.title"
+          :text="deleteConfirmDialog.text"
+        />
       </v-card>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import confirmDialog from '@/components/confirmDialog'
+import ConfirmDialog from '@/components/ConfirmDialog'
+import GlossaryEditForm from '@/components/GlossaryEditForm'
 export default {
   name: 'GlossaryList',
   components: {
-    confirmDialog
+    ConfirmDialog,
+    GlossaryEditForm
   },
   props: {
     glossarys: { type: Array, default: () => ({}) },
@@ -70,19 +77,23 @@ export default {
         title: '確認',
         text: '削除してもよろしいですか？',
         flg: false
+      },
+      glossaryEditForm: {
+        title: 'Glossary edit form',
+        flg: false
       }
     }
   },
   mounted() {
-    // this.$store.dispatch('user/setUserName', this.$route.query.user)
     this.$ItemStorage.fetch(this.username)
   },
   methods: {
+    updateItem(event, item) {
+      this.glossaryEditForm.flg = false
+      this.$ItemStorage.update(this.username, item, event)
+    },
     deleteItem(id) {
       this.$ItemStorage.delete(this.username, id)
-    },
-    openDialog() {
-      this.deleteConfirmDialog.flg = true
     },
     confirmDialogResponse(event, id) {
       this.deleteConfirmDialog.flg = false

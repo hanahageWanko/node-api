@@ -24,9 +24,10 @@ const QUERYS = {
   UPDATE_ITEM: tablename => {
     return `UPDATE ${tablename} SET 
                 title=?,
-                rawtext=?, 
+								rawtext=?,
+								created_at=?,
                 updated_at=? 
-                WHERE [id] = ?`;
+                WHERE id = ?`;
   },
   ENUMERATE_ITEMS_BY_ID: tablename => {
     return `SELECT id, 
@@ -363,14 +364,14 @@ exports.enumerateItemsByUserName = enumerateItemsByUserName;
 var updateItemAtUserName = function(userName, dataObj, itemId) {
   console.log(`------------- updateItemAtUserName --------------`);
 
-  var openDb = openSqlite3.getInstance();
-  var closeDb = closeSqlite3.getInstance();
-
-  var text = dataObj.text;
-  var create = dataObj.create;
-  var update = dataObj.update;
-
-  var promise = openDb(dbPath);
+  const openDb = openSqlite3.getInstance();
+  const closeDb = closeSqlite3.getInstance();
+  const title = dataObj.title;
+  const text = dataObj.text;
+  const create = dataObj.create;
+  const update = dataObj.update;
+  const id = itemId;
+  let promise = openDb(dbPath);
   promise = promise
     .then(db => {
       return _querySqlite3(
@@ -384,10 +385,11 @@ var updateItemAtUserName = function(userName, dataObj, itemId) {
       return _querySqlite3(
         db,
         QUERYS.UPDATE_ITEM(process.env.SQLITE_TABLE_NAME),
-        [title, text, update, itemId]
+        [title, text, create, update, id]
       );
     })
     .then(result => {
+      console.log(result);
       var db = result.db;
       return closeDb(db).then(() => {
         return Promise.resolve({
@@ -395,11 +397,11 @@ var updateItemAtUserName = function(userName, dataObj, itemId) {
           jsonData: {
             items: [
               {
-                id: itemId,
-                title: title,
-                text: text,
-                create: create,
-                update: update
+                id,
+                title,
+                text,
+                create,
+                update
               }
             ],
             user: userName

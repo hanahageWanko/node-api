@@ -12,7 +12,9 @@ export default (context, inject) => {
   const ItemStorage = {
     add: (userName, postData) => {
       const today = new Date()
-      const createTime = today.getTime().toString()
+      // const createTime = today.getTime().toString()
+      const createTime = today.toLocaleDateString()
+      console.log(createTime)
       return HTTP.post(
         targetUrl(userName),
         {
@@ -52,6 +54,27 @@ export default (context, inject) => {
         })
         context.store.dispatch('glossary/getGlossary', glossaryList)
       })
+    },
+    update: (userName, postData, changeData) => {
+      const today = new Date()
+      const updateTime = today.getTime().toString()
+      const putData = {
+        title: changeData.title,
+        text: changeData.text,
+        create: postData.create,
+        update: updateTime
+      }
+      console.table(putData)
+      return HTTP.put(targetUrl(userName) + '/' + postData.id, putData).then(
+        (result) => {
+          const responsedata = result.data
+          const items = responsedata.items
+          const item = items[0]
+          const addedItem = createNoteItem(item)
+          context.store.dispatch('glossary/updateGlossary', addedItem)
+          return Promise.resolve()
+        }
+      )
     },
     delete: (userName, targetId) => {
       return HTTP.delete(targetUrl(userName) + '/' + targetId).then(
