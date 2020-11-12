@@ -3,7 +3,7 @@
     <v-col
       v-for="(item, index) in glossarys"
       :key="index"
-      cols="4"
+      cols="3"
       class="glossary-list-item"
     >
       <v-card dark>
@@ -17,7 +17,7 @@
           </v-col>
           <v-col cols="auto" class="p-0">
             <v-btn
-              @click="glossaryEditForm.flg = true"
+              @click="openDialog(glossaryEditForm, item)"
               fab
               icon
               small
@@ -28,7 +28,7 @@
               </v-icon>
             </v-btn>
             <v-btn
-              @click="deleteConfirmDialog.flg = true"
+              @click="openDialog(deleteConfirmDialog, item)"
               fab
               icon
               small
@@ -38,19 +38,21 @@
             </v-btn>
           </v-col>
         </v-row>
-        <GlossaryEditForm
-          v-if="glossaryEditForm.flg"
-          @updateItem="updateItem($event, item)"
-          :title="deleteConfirmDialog.title"
-          :glossary="item"
-        />
-        <ConfirmDialog
-          v-if="deleteConfirmDialog.flg"
-          @confirmDialogResponse="confirmDialogResponse($event, item.id)"
-          :title="deleteConfirmDialog.title"
-          :text="deleteConfirmDialog.text"
-        />
       </v-card>
+      <GlossaryEditForm
+        v-if="glossaryEditForm.flg"
+        @updateItem="updateItem($event, item)"
+        @cancelUpdate="closeDialog(glossaryEditForm)"
+        :title="glossaryEditForm.title"
+        :glossary="tmpElm"
+      />
+      <ConfirmDialog
+        v-if="deleteConfirmDialog.flg"
+        @deleteItem="deleteItem(tmpElm.id)"
+        @cancelDelete="closeDialog(deleteConfirmDialog)"
+        :title="deleteConfirmDialog.title"
+        :text="deleteConfirmDialog.text"
+      />
     </v-col>
   </v-row>
 </template>
@@ -81,26 +83,38 @@ export default {
       glossaryEditForm: {
         title: 'Glossary edit form',
         flg: false
-      }
+      },
+      tmpElm: {}
     }
   },
   mounted() {
     this.$ItemStorage.fetch(this.username)
   },
   methods: {
-    updateItem(event, item) {
-      this.glossaryEditForm.flg = false
-      this.$ItemStorage.update(this.username, item, event)
+    openDialog(dialog, item) {
+      dialog.flg = true
+      this.tmpElm = item
+    },
+    closeDialog(dialog) {
+      dialog.flg = false
+      this.tmpElm = {}
+    },
+    updateItem(event) {
+      const newData = event.newData
+      const originalData = event.originalData
+      this.$ItemStorage.update(this.username, originalData, newData)
+      this.closeDialog(this.glossaryEditForm)
     },
     deleteItem(id) {
+      this.closeDialog(this.deleteConfirmDialog)
       this.$ItemStorage.delete(this.username, id)
-    },
-    confirmDialogResponse(event, id) {
-      this.deleteConfirmDialog.flg = false
-      if (event) this.deleteItem(id)
     }
   }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-card {
+  width: 100%;
+}
+</style>

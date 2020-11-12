@@ -7,7 +7,9 @@ export default {
   },
   updadateGlossaryMutation: async (state, glossary) => {
     for (let i = 0; i < state.GlossaryList.length; i++) {
-      if (state.GlossaryList[i].id === Number(glossary.id)) {
+      console.log(state.GlossaryList[i])
+      console.log(glossary)
+      if (Number(state.GlossaryList[i].id) === Number(glossary.id)) {
         await state.GlossaryList.splice(i, 1, glossary)
       }
     }

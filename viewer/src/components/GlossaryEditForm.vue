@@ -21,10 +21,10 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="dialog = false" color="secondary" text>
+        <v-btn @click="closeDialog()" color="secondary" text>
           キャンセル
         </v-btn>
-        <v-btn @click="closeDialog()" color="primary" text>
+        <v-btn @click="fireUpdate()" color="primary" text>
           更新する
         </v-btn>
       </v-card-actions>
@@ -54,7 +54,14 @@ export default {
   methods: {
     closeDialog() {
       this.dialog = false
-      this.$emit('updateItem', this.item)
+      this.$emit('cancelUpdate')
+    },
+    fireUpdate() {
+      this.dialog = false
+      this.$emit('updateItem', {
+        newData: this.item,
+        originalData: this.glossary
+      })
     }
   }
 }

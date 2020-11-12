@@ -43,7 +43,8 @@ export default {
   methods: {
     closeDialog(flg) {
       this.dialog = false
-      this.$emit('confirmDialogResponse', flg)
+      if (flg) this.$emit('deleteItem')
+      if (!flg) this.$emit('cancelDelete')
     }
   }
 }
