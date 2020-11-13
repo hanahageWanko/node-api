@@ -90,8 +90,10 @@ module.exports = {
     port: 8000, // デフォルト: 3000
     host: 'localhost' // デフォルト: localhost
   },
-  /// // vue.config.js
   outputDir: '../src/public',
+  generate: {
+    dir: '../src/public'
+  },
   devServer: {
     proxy: {
       '^/api': {
