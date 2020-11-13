@@ -1,0 +1,8 @@
+[
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/Users/Weby/Desktop/git/node-api/viewer/src/pages/index.vue",
+    "chunkName": "pages/index"
+  }
+]
