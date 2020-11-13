@@ -91,7 +91,7 @@ module.exports = {
     host: 'localhost' // デフォルト: localhost
   },
   /// // vue.config.js
-  outputDir: '../src/public',
+  buildDir: '../src/public',
   devServer: {
     proxy: {
       '^/api': {
