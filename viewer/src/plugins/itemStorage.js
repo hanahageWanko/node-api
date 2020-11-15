@@ -14,7 +14,8 @@ export default (context, inject) => {
       const today = new Date()
       // const createTime = today.getTime().toString()
       const createTime = today.toLocaleDateString()
-      console.log(createTime)
+      // console.log(createTime)
+      console.log(targetUrl(userName))
       return HTTP.post(
         targetUrl(userName),
         {
@@ -28,6 +29,7 @@ export default (context, inject) => {
           .set({'x-api-key' : 'foobar'}) 
           */
       ).then((result) => {
+        console.log(result)
         const responsedata = result.data
         const items = responsedata.items
         const item = items[0]
@@ -64,7 +66,6 @@ export default (context, inject) => {
         create: postData.create,
         update: updateTime
       }
-      console.table(putData)
       return HTTP.put(targetUrl(userName) + '/' + postData.id, putData).then(
         (result) => {
           const responsedata = result.data

@@ -48,12 +48,13 @@ export default {
       }
       if (postData.title !== '' && postData.text !== '') {
         this.createGlossaryFlg = true
-        console.log(postData)
         this.$ItemStorage.add(this.username, postData).then((createdItem) => {
           this.inputText = ''
           this.inputTitle = ''
           this.createGlossaryFlg = false
+          console.log('ok')
         })
+        console.log(postData)
       }
     }
   }

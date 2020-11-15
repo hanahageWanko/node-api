@@ -18,6 +18,7 @@ router.use((req, res, next) => {
 });
 
 const _sendResponseAferPromise = function(targetPromise, res) {
+  console.log("send-api");
   return targetPromise
     .then(function(result) {
       console.log("result");
@@ -38,17 +39,18 @@ router.get("/users/:userId/items", function(req, res) {
   const userName = req.params.userId;
   const query = req.query;
   const promise = enumerateItemsByUserName(userName, query);
-
+  console.log("get:" + { req });
   _sendResponseAferPromise(promise, res);
 });
 
 router.post("/users/:userId/items", function(req, res) {
+  console.log("api-post");
   const createItemAtUserName = itemsSingleton.getInstance()
     .createItemAtUserName;
   const userName = req.params.userId;
   const postData = req.body;
   const promise = createItemAtUserName(userName, postData);
-
+  console.log("post:" + { req });
   _sendResponseAferPromise(promise, res);
 });
 
