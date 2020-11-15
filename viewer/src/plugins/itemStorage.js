@@ -4,6 +4,7 @@ import createNoteItem from './noteItem'
 const HTTP = axios.create({
   baseURL: process.env.BASE_URL
 })
+console.log('change')
 
 const targetUrl = (userName) => {
   return `/users/${userName}/items`
