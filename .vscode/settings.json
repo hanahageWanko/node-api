@@ -2,5 +2,7 @@
   "appService.zipIgnorePattern": [
     "node_modules{,/**}",
     ".vscode{,/**}"
-  ]
+  ],
+  "appService.defaultWebAppToDeploy": "/subscriptions/23d20ea8-904e-4a9f-a7b6-215608da044e/resourceGroups/node/providers/Microsoft.Web/sites/glossarys",
+  "appService.deploySubpath": ""
 }

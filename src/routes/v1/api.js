@@ -6,7 +6,7 @@ const Factory4Hook = require("../../factory4hook.js").Factory4Hook;
 const itemsSingleton = new Factory4Hook(require("../../api/v1/crud_items"));
 
 if (process.env.NODE_ENV == "test") router["itemsSingleton"] = itemsSingleton;
-
+// console.log(itemsSingleton);
 router.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -16,7 +16,6 @@ router.use((req, res, next) => {
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   next();
 });
-
 const _sendResponseAferPromise = function(targetPromise, res) {
   console.log("send-api");
   return targetPromise
@@ -27,6 +26,7 @@ const _sendResponseAferPromise = function(targetPromise, res) {
       res.end();
     })
     .catch(err => {
+      console.log('err');
       console.log(targetPromise);
       res.status(500).send(err);
       res.end();

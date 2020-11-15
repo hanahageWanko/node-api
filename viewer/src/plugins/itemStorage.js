@@ -2,7 +2,7 @@ import axios from 'axios'
 import createNoteItem from './noteItem'
 
 const HTTP = axios.create({
-  baseURL: process.env.API_END_POINT
+  baseURL: process.env.BASE_URL
 })
 
 const targetUrl = (userName) => {
@@ -51,6 +51,8 @@ export default (context, inject) => {
         const responsedata = result.data
         const items = responsedata.items
         const glossaryList = []
+        console.log(process.env.NODE_ENV)
+        console.log(process.env.BASE_URL)
         items.forEach(function(item) {
           glossaryList.push(createNoteItem(item))
         })

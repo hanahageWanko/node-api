@@ -69,13 +69,15 @@ const sqlite3 = new Factory4Hook(require("sqlite3"));
 
 var _openSqlite3 = function(databaseName) {
   console.log(`------------- open --------------`);
+
   // console.log('_openSqlite3')
   // console.log(Factory4Hook)
   return new Promise(function(resolve, reject) {
     var sqlite = sqlite3.getInstance().verbose();
     var db = new sqlite.Database(dbPath, err => {
       if (!err) {
-        console.log(db);
+        console.log(sqlite3);
+        // sqlite_busy_timeout(db, 3000 /* ms */);
         resolve(db);
       } else {
         reject(err);

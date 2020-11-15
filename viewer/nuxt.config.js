@@ -1,14 +1,15 @@
 const colors = require('vuetify/es5/util/colors').default
-
+const environment = process.env.NODE_ENV
+const envSettings = require(`./env.${environment}.js`)
 require('dotenv').config()
+
+console.log(envSettings)
 
 module.exports = {
   ssr: false,
   srcDir: 'src',
   telemetry: false,
-  env: {
-    API_END_POINT: process.env.API_END_POINT
-  },
+  env: envSettings,
   /*
    ** Headers of the page
    */
