@@ -20,13 +20,13 @@ const _sendResponseAferPromise = function(targetPromise, res) {
   console.log("send-api");
   return targetPromise
     .then(function(result) {
-      console.log("result");
+      console.log("api-result");
       console.log(result);
       res.status(result.status).send(result.jsonData);
       res.end();
     })
     .catch(err => {
-      console.log('err');
+      console.log("err");
       console.log(targetPromise);
       res.status(500).send(err);
       res.end();

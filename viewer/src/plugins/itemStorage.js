@@ -4,7 +4,6 @@ import createNoteItem from './noteItem'
 const HTTP = axios.create({
   baseURL: process.env.BASE_URL
 })
-console.log('change')
 
 const targetUrl = (userName) => {
   return `/users/${userName}/items`
@@ -15,8 +14,6 @@ export default (context, inject) => {
       const today = new Date()
       // const createTime = today.getTime().toString()
       const createTime = today.toLocaleDateString()
-      // console.log(createTime)
-      console.log(targetUrl(userName))
       return HTTP.post(
         targetUrl(userName),
         {
@@ -30,7 +27,6 @@ export default (context, inject) => {
           .set({'x-api-key' : 'foobar'}) 
           */
       ).then((result) => {
-        console.log(result)
         const responsedata = result.data
         const items = responsedata.items
         const item = items[0]
@@ -52,8 +48,6 @@ export default (context, inject) => {
         const responsedata = result.data
         const items = responsedata.items
         const glossaryList = []
-        console.log(process.env.NODE_ENV)
-        console.log(process.env.BASE_URL)
         items.forEach(function(item) {
           glossaryList.push(createNoteItem(item))
         })

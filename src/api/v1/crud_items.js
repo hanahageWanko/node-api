@@ -67,17 +67,12 @@ const QUERYS = {
 
 const sqlite3 = new Factory4Hook(require("sqlite3"));
 
-var _openSqlite3 = function(databaseName) {
+var _openSqlite3 = function(dbPath) {
   console.log(`------------- open --------------`);
-
-  // console.log('_openSqlite3')
-  // console.log(Factory4Hook)
   return new Promise(function(resolve, reject) {
     var sqlite = sqlite3.getInstance().verbose();
     var db = new sqlite.Database(dbPath, err => {
       if (!err) {
-        console.log(sqlite3);
-        // sqlite_busy_timeout(db, 3000 /* ms */);
         resolve(db);
       } else {
         reject(err);
@@ -107,6 +102,7 @@ if (process.env.NODE_ENV == "test") {
   exports.closeSqlite3 = closeSqlite3;
 }
 var _querySqlite3 = function(db, queryText, params) {
+  db.configure("busyTimeout", 2000);
   return new Promise(function(resolve, reject) {
     db.all(queryText, params, function(err, rows) {
       if (!err) {
@@ -138,7 +134,7 @@ var _countExistItems = function(db, userName) {
       var errMessage = err.message;
 
       if (-1 < errMessage.indexOf("no such table")) {
-        return _querySqlite3(
+        return _querySqlite3.exec(
           db,
           QUERYS.CREATE_TABLE(process.env.SQLITE_TABLE_NAME),
           []
