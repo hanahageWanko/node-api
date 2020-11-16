@@ -1,5 +1,5 @@
 const path = require("path");
-const dbPath = path.resolve(__dirname, "../../db/mydb.sqlite3");
+const dbPath = path.resolve(__dirname, "../../db/db.sqlite3");
 
 const Factory4Hook = require("../../factory4hook.js").Factory4Hook;
 const QUERYS = {
@@ -72,7 +72,6 @@ var _openSqlite3 = function(dbPath) {
   return new Promise(function(resolve, reject) {
     var sqlite = sqlite3.getInstance().verbose();
     var db = new sqlite.Database(dbPath, err => {
-      db.configure("busyTimeout", 2000);
       console.log("IN!");
       if (!err) {
         resolve(db);
@@ -104,7 +103,6 @@ if (process.env.NODE_ENV == "test") {
   exports.closeSqlite3 = closeSqlite3;
 }
 var _querySqlite3 = function(db, queryText, params) {
-  db.configure("busyTimeout", 2000);
   return new Promise(function(resolve, reject) {
     db.all(queryText, params, function(err, rows) {
       if (!err) {
@@ -124,7 +122,7 @@ var _querySqlite3 = function(db, queryText, params) {
 
 var _countExistItems = function(db, userName) {
   console.log(`------------- _countExistItems --------------`);
-  db.configure("busyTimeout", 2000);
+
   return _querySqlite3(
     db,
     QUERYS.COUNT_EXIST_ITEMS(process.env.SQLITE_TABLE_NAME),
@@ -155,7 +153,7 @@ var _countExistItems = function(db, userName) {
 
 var _insertItemAndGetId = function(db, userName, create, update, title, text) {
   console.log(`------------- _insertItemAndGetId --------------`);
-  db.configure("busyTimeout", 2000);
+
   return _querySqlite3(db, QUERYS.INSERT_ITEM(process.env.SQLITE_TABLE_NAME), [
     userName,
     create,
@@ -163,7 +161,6 @@ var _insertItemAndGetId = function(db, userName, create, update, title, text) {
     title,
     text
   ]).then(() => {
-    db.configure("busyTimeout", 2000);
     return _querySqlite3(
       db,
       QUERYS.ENUMERATE_ITEMS_ON_USER_AND_TEXT(process.env.SQLITE_TABLE_NAME),
@@ -184,7 +181,7 @@ var _insertOrNoteiceExist = function(
   console.log(`------------- _insertOrNoteiceExist --------------`);
 
   var closeDb = closeSqlite3.getInstance();
-  db.configure("busyTimeout", 2000);
+
   if (existedRows.length == 0) {
     return _insertItemAndGetId(db, userName, create, update, title, text).then(
       result => {
@@ -247,12 +244,11 @@ var createItemAtUserName = function(userName, dataObj) {
   var promise = openDb(dbPath);
   promise = promise
     .then(db => {
-      db.configure("busyTimeout", 2000);
       return _countExistItems(db, userName);
     })
     .then(result => {
       var db = result.db;
-      db.configure("busyTimeout", 2000);
+
       var numberOfExistItems = result.numberOfExistItems;
       return _querySqlite3(
         db,
