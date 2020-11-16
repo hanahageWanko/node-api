@@ -1,5 +1,5 @@
 const path = require("path");
-const dbPath = path.resolve(__dirname, "../../db/db.sqlite3");
+const dbPath = path.resolve(__dirname, "../../database/database.sqlite");
 
 const Factory4Hook = require("../../factory4hook.js").Factory4Hook;
 const QUERYS = {
@@ -134,7 +134,7 @@ var _countExistItems = function(db, userName) {
       var errMessage = err.message;
 
       if (-1 < errMessage.indexOf("no such table")) {
-        return _querySqlite3.exec(
+        return _querySqlite3(
           db,
           QUERYS.CREATE_TABLE(process.env.SQLITE_TABLE_NAME),
           []
@@ -147,6 +147,7 @@ var _countExistItems = function(db, userName) {
       var numberOfExistItems =
         result.rows.length == 1 ? result.rows[0]["count(*)"] : 0;
       result["numberOfExistItems"] = numberOfExistItems;
+
       return Promise.resolve(result);
     });
 };
