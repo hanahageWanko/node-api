@@ -72,11 +72,18 @@ var _openSqlite3 = function(dbPath) {
   return new Promise(function(resolve, reject) {
     var sqlite = sqlite3.getInstance().verbose();
     var db = new sqlite.Database(dbPath, err => {
-      console.log("IN!");
       if (!err) {
-        resolve(db);
+        db.exec("PRAGMA foreign_keys = ON;", function(error) {
+          if (error) {
+            console.error("Pragma statement didn't work.");
+          } else {
+            resolve(db);
+            console.log("Foreign Key Enforcement is on.");
+          }
+        });
       } else {
         reject(err);
+        return;
       }
     });
     // console.log('db')

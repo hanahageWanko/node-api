@@ -18,8 +18,6 @@ var Factory4Hook = function(staticInstance) {
   // console.log(this.originalInstance)
 };
 Factory4Hook.prototype.getInstance = function() {
-  console.log("this.instance");
-  console.log(this.instance);
   // console.log('inFactory.getInstance')
   // console.log(this.instance)
   // console.log('this.instance')

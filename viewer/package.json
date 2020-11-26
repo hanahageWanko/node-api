@@ -5,7 +5,7 @@
   "author": "nakagawa",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "dev": "cross-env NODE_ENV=development nuxt",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production nodemon server/index.js --watch server",
     "generate": "cross-env NODE_ENV=production nuxt generate",
