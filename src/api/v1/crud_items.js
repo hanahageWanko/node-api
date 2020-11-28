@@ -1,5 +1,5 @@
 const path = require("path");
-const dbPath = path.resolve(__dirname, "../../database/database.sqlite");
+const dbPath = path.resolve(__dirname, "../../../database/database.sqlite");
 
 const Factory4Hook = require("../../factory4hook.js").Factory4Hook;
 const QUERYS = {

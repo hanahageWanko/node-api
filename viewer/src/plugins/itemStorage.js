@@ -46,6 +46,7 @@ export default (context, inject) => {
               */
       }).then((result) => {
         const responsedata = result.data
+        console.log(responsedata)
         const items = responsedata.items
         const glossaryList = []
         items.forEach(function(item) {

@@ -86,8 +86,13 @@ export default {
       tmpElm: {}
     }
   },
-  mounted() {
-    this.$ItemStorage.fetch(this.username)
+  created() {
+    if (this.username) {
+      console.log('なあああああ')
+      console.log(this.$ItemStorage)
+      console.log(this.username)
+      this.$ItemStorage.fetch(this.username)
+    }
   },
   methods: {
     openDialog(dialog, item) {
